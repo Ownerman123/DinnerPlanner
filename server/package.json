@@ -1,0 +1,26 @@
+{
+  "type": "module",
+  "name": "server",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "concurrently \"node server.js\" \"node authServer.js\"",
+    "dev": "concurrently \"cd server && npm run start\" \"cd client && npm run dev\"",
+    "seed": "node seeds/seed.js",
+    "build": "cd client && npm run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "concurrently": "^8.2.2",
+    "cors": "^2.8.5",
+    "express": "^4.17.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^8.5.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3"
+  }
+}
