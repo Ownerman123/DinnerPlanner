@@ -8,6 +8,8 @@ dotenv.config();
 
 //auth
 const router = e.Router();
+
+// {"username", "password"}
 router.post('/login', async (req,res) => {
 
     const { username, password } = req.body;
@@ -34,6 +36,8 @@ router.post('/login', async (req,res) => {
     res.status(200).json({ accessToken: accessToken, refreshToken: refreshToken });
 });
 
+
+// {"token"}
 router.post('/token', async (req,res) => {
 
     const refreshToken = req.body.token;
@@ -50,6 +54,8 @@ router.post('/token', async (req,res) => {
     })
 
 });
+
+// {"token"}
 router.delete('/logout', async (req,res)=> {
  const deleteToken = await RefreshToken.deleteMany({token: req.body.token});
 
