@@ -12,19 +12,19 @@ const router = e.Router();
 // {"username", "password"}
 router.post('/login', async (req,res) => {
 
-    const { username, password } = req.body;
+    const { email, password } = req.body;
     
     // Check if the user exists and the password is correct
-    const user = await User.findOne({username: username});
+    const user = await User.findOne({email: email});
     
     
     if (!user) {
-      return res.status(401).json({ message: 'Invalid username or password' });
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
     const cp = await user.isCorrectPassword(password);
 
     if(!cp){
-        return res.status(401).json({ message: 'Invalid username or password' });
+        return res.status(401).json({ message: 'Invalid email or password' });
     }
     
     // Generate a JWT with a secret key
@@ -45,12 +45,17 @@ router.post('/token', async (req,res) => {
     const refreshTokenValid = await RefreshToken.findOne({token: refreshToken});
     console.log(refreshTokenValid);
     
-    if(refreshToken == null) return res.sendStatus(401);
-    if(!refreshTokenValid) return res.sendStatus(403);
+    if(refreshToken === null) return res.status(401).json({message:"badToken"});
+    if (!refreshToken) return res.status(401).json({ message: "badToken" });
+    if(!refreshTokenValid) return res.status(403).json({message:"badToken"});
     jwt.verify(refreshToken, process.env.RJWT_SECRET, (err, user) => {
-        if(err) return res.sendStatus(403);
+        if(err){
+            console.error("JWT Verification Error:", err);
+            return res.sendStatus(403);
+        }
+            
         const accessToken = GenerateAccessToken({username: user.name});
-        res.json(accessToken);
+        res.json({token:accessToken}).status(200);
     })
 
 });
@@ -65,9 +70,9 @@ router.delete('/logout', async (req,res)=> {
 })
 
 function GenerateAccessToken(user) {
-    const payload = {username: user};
+    const payload = {user};
     const secretKey = process.env.JWT_SECRET;
-    const options = { expiresIn: '15m' };
+    const options = { expiresIn: '15s' };
 
     return jwt.sign(payload, secretKey, options);
     

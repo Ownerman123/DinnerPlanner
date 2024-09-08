@@ -19,11 +19,20 @@ router.post('/', async (req, res) => {
 
         const user = await User.create(req.body);
         res.json(user);
+        
     } catch (err) {
-        res.json({ message: err })
+        res.json({ message: err }).status(500);
     }
 
 
+});
+router.delete('/', async (req, res) => {
+    try{
+        const deleted = await User.deleteOne({username: req.body.username})
+        res.json(deleted).status(201);
+    } catch (err) {
+        res.status(500).json({message: err});
+    }
 });
 
 export default router;
