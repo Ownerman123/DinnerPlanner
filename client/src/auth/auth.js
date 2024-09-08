@@ -10,6 +10,7 @@ class AuthService {
         const refreshToken = JSON.parse(this.getRefToken());
         
         if (this.isTokenExpired(token)) {
+            console.log('getting new token');
             const data = await fetch("http://localhost:4001/token",
                 {
                     method: "POST",
@@ -19,16 +20,15 @@ class AuthService {
                     body: JSON.stringify({ token: refreshToken })
                 }
             );
-            console.log(data);
+            //console.log(data);
 
             const newtoken = await data.json();
-            console.log("data:", newtoken.token);
+            //console.log("data:", newtoken.token);
             if (!newtoken.token) {
                 console.log('no token')
-                localStorage.removeItem("authToken");
-               localStorage.removeItem("refreshToken");
+                await this.logout(this.getRefToken());
             } else {
-                console.log('yes token')
+             //   console.log('yes token')
                 localStorage.setItem("authToken", newtoken.token);
             }
             token = this.getToken();

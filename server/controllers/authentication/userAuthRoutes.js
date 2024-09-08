@@ -2,6 +2,7 @@ import e from "express";
 import { RefreshToken, User } from "../../models/index.js"
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { jwtDecode } from "jwt-decode";
 
 dotenv.config();
 
@@ -16,6 +17,10 @@ router.post('/login', async (req,res) => {
     
     // Check if the user exists and the password is correct
     const user = await User.findOne({email: email});
+    const passlessUser = await User.findOne({email: email}).select('-password');
+    
+    
+    console.log(passlessUser);
     
     
     if (!user) {
@@ -28,7 +33,8 @@ router.post('/login', async (req,res) => {
     }
     
     // Generate a JWT with a secret key
-    const accessToken = GenerateAccessToken(user.username);
+    
+    const accessToken = GenerateAccessToken(passlessUser);
     const refreshToken = jwt.sign({username: user.username}, process.env.RJWT_SECRET );
     const save = await RefreshToken.create({token: refreshToken});
   
@@ -43,18 +49,20 @@ router.post('/token', async (req,res) => {
     const refreshToken = req.body.token;
     
     const refreshTokenValid = await RefreshToken.findOne({token: refreshToken});
-    console.log(refreshTokenValid);
+    
     
     if(refreshToken === null) return res.status(401).json({message:"badToken"});
     if (!refreshToken) return res.status(401).json({ message: "badToken" });
     if(!refreshTokenValid) return res.status(403).json({message:"badToken"});
+    const decoded = jwtDecode(refreshToken);
+    const encodedUser = await User.findOne({username:decoded.username })
     jwt.verify(refreshToken, process.env.RJWT_SECRET, (err, user) => {
         if(err){
             console.error("JWT Verification Error:", err);
             return res.sendStatus(403);
         }
             
-        const accessToken = GenerateAccessToken({username: user.name});
+        const accessToken = GenerateAccessToken(encodedUser);
         res.json({token:accessToken}).status(200);
     })
 

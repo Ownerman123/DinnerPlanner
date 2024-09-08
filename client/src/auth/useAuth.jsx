@@ -8,12 +8,15 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   useEffect(() => {
     const checkLoginStatus = async () => {
+      console.log("checking logged status")
       const loggedIn = await AuthService.loggedIn();
       setIsLoggedIn(loggedIn);
       if (loggedIn) {
         setUser(AuthService.getProfile());
+        console.log("status good")
       } else {
         setUser(null);
+        console.log("no user");
       }
     };
     checkLoginStatus();
@@ -41,7 +44,7 @@ export function AuthProvider({ children }) {
         isLoggedIn,
         login,
         logout,
-        user,
+        ...user,
         getProfile: AuthService.getProfile,
         getToken: AuthService.getToken,
       }}
