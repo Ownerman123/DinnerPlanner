@@ -1,3 +1,5 @@
+/* eslint-disable no-useless-escape */
+/* eslint-disable react/no-unescaped-entities */
 import { FormControl, FormHelperText, FormErrorMessage, FormLabel, Input, Box, Button, Text, TabPanel, Tab, Tabs, TabPanels,TabList } from "@chakra-ui/react"
 import { useState } from "react"
 import {useAuth} from "../auth/useAuth"
@@ -29,7 +31,7 @@ const Registration = () => {
     const handleLastNameChange = (e) => setLast(e.target.value);
 
 
-    const handleSignup = async (e) => {
+    const handleSignup = async () => {
         const formInfo = { username: username, email: email, firstName: first, lastName: last, password: password }
         if (!formInfo.username || !formInfo.email || !formInfo.firstName || !formInfo.lastName || !formInfo.password) {
             return setError("all fields must be filled");

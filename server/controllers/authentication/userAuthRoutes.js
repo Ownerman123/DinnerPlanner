@@ -55,7 +55,7 @@ router.post('/token', async (req,res) => {
     if (!refreshToken) return res.status(401).json({ message: "badToken" });
     if(!refreshTokenValid) return res.status(403).json({message:"badToken"});
     const decoded = jwtDecode(refreshToken);
-    const encodedUser = await User.findOne({username:decoded.username })
+    const encodedUser = await User.findOne({username:decoded.username }).select('-password');
     jwt.verify(refreshToken, process.env.RJWT_SECRET, (err, user) => {
         if(err){
             console.error("JWT Verification Error:", err);
@@ -70,7 +70,8 @@ router.post('/token', async (req,res) => {
 
 // {"token"}
 router.delete('/logout', async (req,res)=> {
- const deleteToken = await RefreshToken.deleteMany({token: req.body.token});
+const deleted = await RefreshToken.deleteMany({token: req.body.token});
+ console.log(deleted);
 
 
  res.sendStatus(204);

@@ -1,6 +1,5 @@
-import { Button, Heading } from "@chakra-ui/react"
+import { Heading } from "@chakra-ui/react"
 import { Link } from "react-router-dom";
-import Registration from "../../pages/Registration";
 import { useAuth } from "../../auth/useAuth";
 
 const Header = () => {

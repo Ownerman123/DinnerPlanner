@@ -26,7 +26,7 @@ class AuthService {
             //console.log("data:", newtoken.token);
             if (!newtoken.token) {
                 console.log('no token')
-                await this.logout(this.getRefToken());
+                await this.logout();
             } else {
              //   console.log('yes token')
                 localStorage.setItem("authToken", newtoken.token);
@@ -55,11 +55,16 @@ class AuthService {
         localStorage.setItem("authToken", idToken);
         window.location.assign("/");
     }
-    async logout(refToken) {
+    async logout() {
+        const token = JSON.parse(this.getRefToken());
+        
         await fetch("http://localhost:4001/logout", {
             method: "DELETE",
-            body: { token: refToken }
-        })
+            headers: {
+                'Content-Type': 'application/json', 
+            },
+            body: JSON.stringify({ token: token })
+        });
         localStorage.removeItem("authToken");
         localStorage.removeItem("refreshToken");
         window.location.assign("/");
