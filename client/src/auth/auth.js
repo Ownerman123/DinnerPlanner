@@ -8,7 +8,7 @@ class AuthService {
     async loggedIn() {
         let token = this.getToken();
         const refreshToken = JSON.parse(this.getRefToken());
-        
+
         if (this.isTokenExpired(token)) {
             console.log('getting new token');
             const data = await fetch("http://localhost:4001/token",
@@ -28,7 +28,7 @@ class AuthService {
                 console.log('no token')
                 await this.logout();
             } else {
-             //   console.log('yes token')
+                //   console.log('yes token')
                 localStorage.setItem("authToken", newtoken.token);
             }
             token = this.getToken();
@@ -57,11 +57,11 @@ class AuthService {
     }
     async logout() {
         const token = JSON.parse(this.getRefToken());
-        
+
         await fetch("http://localhost:4001/logout", {
             method: "DELETE",
             headers: {
-                'Content-Type': 'application/json', 
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({ token: token })
         });

@@ -1,29 +1,34 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import RecipeCard from "../components/recipeStuff/RecipeCard"
 
 
-const Recipe = () => {
 
-    const { id } = useParams();
+const Recipes = () => {
+
+
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     useEffect(() => {
         async function Getdata() {
 
-            const recipe = await fetch(`http://localhost:3001/api/recipe/${id}`, { method: 'get' }).then(response => {
+            const recipes = await fetch(`http://localhost:3001/api/recipe`, { method: 'get' }).then(response => {
                 if (response.ok) {
-                    console.log();
+                    
                     return response.json();
                 }
                 throw response;
-            }).then(data => setData(data)).catch(err => {
+            }).then(data => {
+                setData(data);
+                //console.log(data);
+
+            }).catch(err => {
                 console.log("Error fetching data", err);
                 setError(err);
             }).finally(() => setLoading(false));
 
 
-            return recipe;
+            return recipes;
         }
         Getdata();
     }, []);
@@ -45,19 +50,21 @@ const Recipe = () => {
    // console.log(data);
     return (
         <>
-            <p>{data.title}</p>
-            <h2>Ingredients</h2>
+            
+            <h2>recipes</h2>
             <ul>
-                {data.ingredients.map((ingredient) => (
-                    <li key={ingredient.name} >
-                        {ingredient.name + ' ' + ingredient.amount + ' ' +ingredient.unit}
+                {data ? data.map((recipe) => (
+                    <li key={recipe.id} >
+                        <RecipeCard recipe={recipe}/>
                     </li>
-                ))}
+                    
+                    
+                )) : <li> nope</li> }
             </ul>
-            <p>{data.instructions}</p>
+            
         </>
     );
 
 }
 
-export default Recipe;
+export default Recipes;

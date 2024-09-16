@@ -1,8 +1,8 @@
 /* eslint-disable no-useless-escape */
 /* eslint-disable react/no-unescaped-entities */
-import { FormControl, FormHelperText, FormErrorMessage, FormLabel, Input, Box, Button, Text, TabPanel, Tab, Tabs, TabPanels,TabList } from "@chakra-ui/react"
+import { FormControl, FormHelperText, FormErrorMessage, FormLabel, Input, Box, Button, Text, TabPanel, Tab, Tabs, TabPanels, TabList } from "@chakra-ui/react"
 import { useState } from "react"
-import {useAuth} from "../auth/useAuth"
+import { useAuth } from "../auth/useAuth"
 
 const Registration = () => {
 
@@ -12,7 +12,7 @@ const Registration = () => {
         return matcher.test(string);
     }
 
-    const {login: authLogin} = useAuth();
+    const { login: authLogin } = useAuth();
 
     const [email, setEmail] = useState('');
     const [first, setFirst] = useState('');
@@ -65,7 +65,7 @@ const Registration = () => {
                 localStorage.setItem("authToken", JSON.stringify(tokensjson.accessToken));
                 localStorage.setItem('refreshToken', JSON.stringify(tokensjson.refreshToken));
                 authLogin(tokensjson.accessToken);
-                
+
                 setError('')
             } catch (err) {
                 console.log(err);
@@ -78,34 +78,34 @@ const Registration = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        const formInfo = {  email: email, password: password }
+        const formInfo = { email: email, password: password }
         if (!formInfo.email || !formInfo.password) {
             return setError("all fields must be filled");
         }
-    
-        
-            try {
-            
-                const token = await fetch('http://localhost:4001/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email: email, password: password })
-                });
-                const tokensjson = await token.json();
-                localStorage.setItem("authToken", JSON.stringify(tokensjson.accessToken));
-                localStorage.setItem('refreshToken', JSON.stringify(tokensjson.refreshToken));
-                if(tokensjson){
 
-                    authLogin(tokensjson.accessToken);
-                  
-                }
-                setError('')
-            } catch (err) {
-                console.log(err);
+
+        try {
+
+            const token = await fetch('http://localhost:4001/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: email, password: password })
+            });
+            const tokensjson = await token.json();
+            localStorage.setItem("authToken", JSON.stringify(tokensjson.accessToken));
+            localStorage.setItem('refreshToken', JSON.stringify(tokensjson.refreshToken));
+            if (tokensjson) {
+
+                authLogin(tokensjson.accessToken);
+
             }
-        
+            setError('')
+        } catch (err) {
+            console.log(err);
+        }
+
     }
 
     const isEmpty = (input) => input === '';
@@ -134,7 +134,7 @@ const Registration = () => {
                                     <Input type='email' value={email} placeholder="Email..." onChange={handleEmailChange} />
                                     {isEmpty(email) ? (
                                         <FormHelperText>
-                                           <></>
+                                            <></>
                                         </FormHelperText>
                                     ) : (
                                         <FormErrorMessage>Email is required.</FormErrorMessage>
@@ -143,7 +143,7 @@ const Registration = () => {
                                 <FormControl >
                                     <FormLabel>Password</FormLabel>
                                     <Input type='password' value={password} placeholder="Password..." onChange={handlePasswordChange} />
-                                    
+
                                 </FormControl>
 
                                 <Text>{error}</Text>

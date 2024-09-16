@@ -8,6 +8,9 @@ import Home from "./pages/home.jsx";
 import _404 from "./pages/404.jsx";
 import Recipe from './pages/Recipe.jsx';
 import Registration from './pages/Registration.jsx'
+import Recipes from './pages/Recipes.jsx';
+import ProtectedRoute from './components/common/ProtectedRoute.jsx';
+import NewRecipe from './pages/NewRecipe.jsx';
 
 import './index.css';
 
@@ -31,19 +34,23 @@ const reactRouter = createBrowserRouter([
         path: "/login",
         element: <Registration />
       },
-      // {
-      //   element: <ProtectedRoute />,
-      //   children: [
-      //     {
-      //       path: "/Post",
-      //       element: <CreatePost />,
-      //     },
-      //     {
-      //       path: "/Dashboard",
-      //       element: <Dashboard />,
-      //     },
-      //   ],
-      // },
+      {
+        path: "/recipes",
+        element: <Recipes />
+      },
+      {
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: "/newrecipe",
+            element: <NewRecipe />,
+          },
+          // {
+          //   path: "/Dashboard",
+          //   element: <Dashboard />,
+          // },
+        ],
+      },
       // {
       //   path: "/Support",
       //   element: <CustomerService />

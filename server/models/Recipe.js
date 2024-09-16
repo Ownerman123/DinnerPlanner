@@ -4,6 +4,11 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 const recipeSchema = new Schema(
     {
+        author: {
+            type: Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        },
         title: {
             type: String,
             required: true,
@@ -11,15 +16,28 @@ const recipeSchema = new Schema(
         },
         ingredients: [
             {
-                type: String
+                name:{
+                    type: String,
+                    trim: true,
+                } ,
+                amount: {
+                    type: String,
+                    trim: true,
+                },
+                unit: {
+                    type: String,
+                }
 
             }
         ],
         instructions: {
             type: String,
             trim: true,
-        }
-
+        },
+        snack:{
+            type: Boolean,
+        },
+        
     },
     {
         toJSON: { virtuals: true },

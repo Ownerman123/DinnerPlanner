@@ -17,15 +17,15 @@ const corsOptions = {
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use('/',cors(corsOptions), authroutes);
+app.use('/', cors(corsOptions), authroutes);
 
 try {
-    await db();
-    app.listen(PORT, () => {
-      console.log(`Auth server running on port ${PORT}!`);
-     
-    });
-  } catch (error) {
-    console.error("Failed to connect to MongoDB", error);
-    process.exit(1);
-  }
+  await db();
+  app.listen(PORT, () => {
+    console.log(`Auth server running on port ${PORT}!`);
+
+  });
+} catch (error) {
+  console.error("Failed to connect to MongoDB", error);
+  process.exit(1);
+}
