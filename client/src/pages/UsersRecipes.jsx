@@ -26,7 +26,7 @@ const UsersRecipes = () => {
                     throw response;
                 }).then(data => {
                     setData(data);
-                    console.log(data);
+                    
                     
                 }).catch(err => {
                     console.log("Error fetching data", err);
@@ -50,7 +50,7 @@ const UsersRecipes = () => {
     if (error) {
         console.log(error);
         return (
-            <p>there was an error</p>
+            <p>There was an error</p>
         )
     }
 
@@ -58,7 +58,7 @@ const UsersRecipes = () => {
     return (
         <>
             
-            <h2>recipes</h2>
+            <h2>Recipes</h2>
             <ul>
                 {data ? data.map((recipe) => (
                     <li key={recipe.id} >
@@ -66,7 +66,7 @@ const UsersRecipes = () => {
                     </li>
                     
                     
-                )) : <li> nope</li> }
+                )) : <li> nothin to see here</li> }
             </ul>
             
         </>

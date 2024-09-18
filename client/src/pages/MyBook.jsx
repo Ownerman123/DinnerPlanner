@@ -12,10 +12,11 @@ const MyBook = () => {
     const [error, setError] = useState(null);
     useEffect(() => {
         async function Getdata() {
-
+            
             if(user){
-
+                
                 const recipes = await fetch(`http://localhost:3001/api/recipe/book/${user._id}`, { method: 'get' }).then(response => {
+                   
                     if (response.ok) {
                         
                         return response.json();
@@ -23,7 +24,7 @@ const MyBook = () => {
                     throw response;
                 }).then(data => {
                     setData(data);
-                    //console.log(data);
+                    console.log(data);
                     
                 }).catch(err => {
                     console.log("Error fetching data", err);
@@ -35,7 +36,7 @@ const MyBook = () => {
             }
             }
             Getdata();
-        }, [user]);
+        },[user]);
         
 
 

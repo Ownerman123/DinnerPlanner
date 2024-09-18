@@ -7,7 +7,7 @@ const router = e.Router();
 //  "/api/user"
 router.get('/', async (req, res) => {
     try {
-        const user = await User.find();
+        const user = await User.find().select('-password');
         res.json({ users: user });
     } catch (error) {
         res.status(500).json({ message: error });
@@ -26,6 +26,17 @@ router.post('/', async (req, res) => {
 
 
 });
+router.get('/book/:id', async (req, res) => {
+    try {
+
+        const user = await User.findOne({ _id: req.params.id }).select('-password');
+        
+        res.json(user);
+
+    } catch (err) {
+        res.json({ message: err }).status(500);
+    }
+})
 router.put('/book', async (req, res) => {
     try {
 

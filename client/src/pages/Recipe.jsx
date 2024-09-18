@@ -6,36 +6,48 @@ import { Button } from "@chakra-ui/react";
 
 const Recipe = () => {
 
-    const {user, isLoggedIn, setUser} = useAuth();
+    const {user, isLoggedIn } = useAuth();
 
     const { id } = useParams();
-    const [data, setData] = useState(null);
-   
+    const [recipeData, setRecipeData] = useState(null);
+    const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isRecipeInBook, setRecipeInBook] = useState(false);
     useEffect(() => {
-        async function Getdata() {
-
-            if(id){
-
-                
-                const recipe = await fetch(`http://localhost:3001/api/recipe/${id}`, { method: 'get' }).then(response => {
-                if (response.ok) {
-                    console.log();
-                    return response.json();
-                }
-                throw response;
-            }).then(data => setData(data)).catch(err => {
-                console.log("Error fetching data", err);
+        const fetchRecipeData = async () => {
+            try {
+                const response = await fetch(`http://localhost:3001/api/recipe/${id}`);
+                if (!response.ok) throw response;
+                const data = await response.json();
+                setRecipeData(data);
+            } catch (err) {
+                console.log("Error fetching recipe data", err);
                 setError(err);
-            }).finally(() => setLoading(false));
-            
-            
-            return recipe;
-        }
-        }
-        Getdata();
-    }, [user]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        const fetchUserData = async () => {
+            if (user?.id) {
+                try {
+                    const response = await fetch(`http://localhost:3001/api/user/book/${user._id}`);
+                    if (!response.ok) throw response;
+                    const data = await response.json();
+                    setUserData(data);
+                    // Check if the recipe is already in the user's book
+                    setRecipeInBook(data.book?.includes(id));
+                } catch (err) {
+                    console.log("Error fetching user data", err);
+                    setError(err);
+                }
+            }
+        };
+
+        fetchRecipeData();
+        fetchUserData();
+    }, [user, id]);
 
 
 
@@ -51,9 +63,9 @@ const Recipe = () => {
         )
     }
     const handleAddToBook = async () => {
-        if(user){
+        if(userData){
 
-            const recipe = await fetch(`http://localhost:3001/api/user/book`,
+            const updatedUser = await fetch(`http://localhost:3001/api/user/book`,
                 { 
                     method: 'put',
                     headers: {
@@ -61,17 +73,26 @@ const Recipe = () => {
                     },
                     body: JSON.stringify({user: user.id, recipeId: id}) 
                 }
-            )
-            const updatedUserbook = user.book.push(id);
-            setUser({...user, book: updatedUserbook});
-            isRecipeInBook = true;
+            ).then(response => {
+                if(response.ok){
+                    return response.json();
+                }
+                throw response
+            }).then(data =>{
+                console.log("set user after adition", data);
+            setUserData(data);
+            console.log(userData);
+            setRecipeInBook(data.book?.includes(id));
+            console.log("set recipe in book to",isRecipeInBook);
+        }).finally(()=>{
             
+        });
             
-            return recipe;
+            return updatedUser;
         }
     }
     const handleRemoveFromBook = async () => {
-        const recipe = await fetch(`http://localhost:3001/api/user/book`,
+        const updatedUser = await fetch(`http://localhost:3001/api/user/book`,
              { 
                 method: 'delete',
                 headers: {
@@ -79,16 +100,26 @@ const Recipe = () => {
                 },
                 body: JSON.stringify({user: user.id, recipeId: id}) 
             }
-        )
-        const updatedUserbook = user.book.filter(item => item !== id);
-        setUser({...user, book: updatedUserbook});
-        isRecipeInBook = false;
-        
+        ).then(response => {
+            if(response.ok){
+                return response.json();
+            }
+            throw response
+        }).then(data =>{
+            console.log("set user after removal", data);
+        setUserData(data);
+        console.log(userData);
+        setRecipeInBook(data.book?.includes(id));
+        console.log("set recipe in book to",isRecipeInBook);
+    }).finally(()=>{
+            
+    });
+    
 
-        return recipe;
+        return updatedUser;
     }
 
-    let isRecipeInBook = user?.book?.includes(id); // Check if recipe is in user's book
+   
 
 const addToBookButton = isLoggedIn ? (
   <Button onClick={isRecipeInBook ? handleRemoveFromBook : handleAddToBook}>
@@ -99,17 +130,17 @@ const addToBookButton = isLoggedIn ? (
    // console.log(data);
     return (
         <>
-            <p>{data.title}</p>
+            <p>{recipeData.title}</p>
             {addToBookButton}
             <h2>Ingredients</h2>
             <ul>
-                {data.ingredients.map((ingredient) => (
+                {recipeData.ingredients.map((ingredient) => (
                     <li key={ingredient.name} >
                         {ingredient.name + ' ' + ingredient.amount + ' ' +ingredient.unit}
                     </li>
                 ))}
             </ul>
-            <p>{data.instructions}</p>
+            <p>{recipeData.instructions}</p>
         </>
     );
 
