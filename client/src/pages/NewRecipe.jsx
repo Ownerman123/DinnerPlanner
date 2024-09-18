@@ -15,20 +15,21 @@ const NewRecipe = () => {
         tags: [],
         snack: false
     });
-    const [ingredientInputs, setIngredientInputs] = useState(['']);
+    const [ingredientInputs, setIngredientInputs] = useState([{name:'', amount:'', unit:'lb'}]);
     const [tagInputs, setTagInputs] = useState([]);
     const [tag, setTag] = useState('');
 
     const addIngredient = () => {
-        setIngredientInputs([...ingredientInputs, '']); // Add an empty string to the inputs array
+        setIngredientInputs([...ingredientInputs, {name:'', amount:'', unit:'lb'}]); // Add an empty string to the inputs array
         
     };
     const addTag = (newtag) => {
-        setTagInputs([...tagInputs, newtag]); // Add an empty string to the inputs array
+        setTagInputs([...tagInputs, newtag]); 
         setFormState({
             ...formState,
             tags: [...tagInputs, newtag],
         });
+        setTag('');
         console.log(formState);
     };
 
@@ -108,11 +109,8 @@ const NewRecipe = () => {
             });
 
             
-            
-            if(newRecipe.ok){
-                console.log("Good", newRecipe);
-                
-            }
+            window.location.assign('/userrecipes');
+            return newRecipe;
         }catch (err){
 
             console.log("bad", err);

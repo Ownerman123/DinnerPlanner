@@ -37,6 +37,12 @@ const recipeSchema = new Schema(
         snack:{
             type: Boolean,
         },
+        tags: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Tag"
+            }
+        ]
         
     },
     {

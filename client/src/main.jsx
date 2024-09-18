@@ -11,6 +11,8 @@ import Registration from './pages/Registration.jsx'
 import Recipes from './pages/Recipes.jsx';
 import ProtectedRoute from './components/common/ProtectedRoute.jsx';
 import NewRecipe from './pages/NewRecipe.jsx';
+import UsersRecipes from './pages/UsersRecipes.jsx';
+import MyBook from './pages/MyBook.jsx'
 
 import './index.css';
 
@@ -44,6 +46,14 @@ const reactRouter = createBrowserRouter([
           {
             path: "/newrecipe",
             element: <NewRecipe />,
+          },
+          {
+            path: "/userrecipes",
+            element: <UsersRecipes />,
+          },
+          {
+            path: "/userbook",
+            element: <MyBook/>,
           },
           // {
           //   path: "/Dashboard",

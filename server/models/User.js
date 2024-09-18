@@ -27,6 +27,12 @@ const userSchema = new Schema(
       unique: true,
       match: [/.+@.+\..+/, "Must match an email address!"],
     },
+    book: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Recipe"
+      }
+    ],
     password: {
       type: String,
       required: true,

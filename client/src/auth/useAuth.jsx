@@ -44,6 +44,7 @@ export function AuthProvider({ children }) {
         isLoggedIn,
         login,
         logout,
+        setUser,
         ...user,
         getProfile: AuthService.getProfile,
         getToken: AuthService.getToken,
