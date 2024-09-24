@@ -13,6 +13,7 @@ import ProtectedRoute from './components/common/ProtectedRoute.jsx';
 import NewRecipe from './pages/NewRecipe.jsx';
 import UsersRecipes from './pages/UsersRecipes.jsx';
 import MyBook from './pages/MyBook.jsx'
+import Plan from './pages/Plan.jsx';
 
 import './index.css';
 
@@ -54,6 +55,10 @@ const reactRouter = createBrowserRouter([
           {
             path: "/userbook",
             element: <MyBook/>,
+          },
+          {
+            path: "/plan",
+            element: <Plan/>,
           },
           // {
           //   path: "/Dashboard",

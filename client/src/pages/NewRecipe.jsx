@@ -97,7 +97,12 @@ const NewRecipe = () => {
         });
     };
 
+    
+
     const createNewRecipe = async () => {
+
+        const noEmpys = {...formState, ingredients: formState.ingredients.filter(ingredient => ingredient.name !== '')};
+        console.log("no empy", noEmpys);
         try {
 
             const newRecipe = await fetch("http://localhost:3001/api/recipe", {
@@ -105,11 +110,11 @@ const NewRecipe = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({...formState, author: user._id })
+                body: JSON.stringify({...noEmpys, author: user._id })
             });
 
             
-            window.location.assign('/userrecipes');
+           window.location.assign('/userrecipes');
             return newRecipe;
         }catch (err){
 
@@ -142,6 +147,7 @@ const NewRecipe = () => {
                                 value={input.name}
                                 minWidth={20}
                                 maxWidth={500}
+                                required = {true}
                                 onChange={(e) => handleIngredientInputChange(index, e.target.value)}
                                 placeholder="Ingredient"
                             />

@@ -2,6 +2,28 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
 const { Schema } = mongoose;
+const ingredientSchema = new mongoose.Schema({
+  name: {
+      type: String,
+      required: true
+  },
+  amounts: [
+      {
+          amount: {
+              type: Number,
+              
+          },
+          unit: {
+              type: String,
+              
+          }
+      }
+  ],
+  checked: {
+    type: Boolean,
+    default: false,
+  }
+});
 const userSchema = new Schema(
   {
     username: {
@@ -33,6 +55,24 @@ const userSchema = new Schema(
         ref: "Recipe"
       }
     ],
+    plan: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Recipe"
+        }
+    ],
+    planShopingList: {
+      
+        type: [ingredientSchema]
+      
+      }
+    ,
+    miscShopingList: {
+      
+        type: [ingredientSchema]
+      
+      }
+    ,
     password: {
       type: String,
       required: true,
@@ -44,6 +84,7 @@ const userSchema = new Schema(
     toObject: { virtuals: true },
   }
 );
+
 
 
 

@@ -17,9 +17,16 @@ const Header = () => {
   };
 
   const logButton = isLoggedIn ? "Logout" : "Login/SignUp";
-  const newRecipeLink = isLoggedIn ? <Link to={'/newrecipe'}>Add new Recipe</Link> : <></>;
-  const MyRecipesLink = isLoggedIn ? <Link to={'/userrecipes'}>My Recipes</Link> : <></>;
-  const MyBookLink = isLoggedIn ? <Link to={'/userbook'}>My Book</Link> : <></>;
+  const loggedLinks = isLoggedIn ? ( 
+  <>
+  <Link to={'/newrecipe'}>Add new Recipe</Link>
+  <Link to={'/userrecipes'}>My Recipes</Link>
+  <Link to={'/userbook'}>My Book</Link>
+  <Link to={'/plan'}>Plan</Link>
+  </>
+
+) : <></>;
+  
 
   return (
     <header>
@@ -27,9 +34,8 @@ const Header = () => {
       <nav>
         <Link onClick={handleAuthAction}>{logButton}</Link>
         <Link to={"/recipes"}>Discover</Link>
-        {MyRecipesLink}
-        {newRecipeLink}
-        {MyBookLink}
+        {loggedLinks}
+        
       </nav>
     </header>
   )
