@@ -6,9 +6,10 @@ import cors from "cors";
 
 
 const PORT = process.env.PORT || 3001;
+const mainUrl = process.env.MAIN_URL || 'http://localhost:5173';
 const app = express();
 const corsOptions = {
-  origin: 'http://localhost:5173',
+  origin: mainUrl,
   optionsSuccessStatus: 200
 
 }
