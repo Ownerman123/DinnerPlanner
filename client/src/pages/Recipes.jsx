@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import RecipeCard from "../components/recipeStuff/RecipeCard"
 
-
+const API = import.meta.env.VITE_API_URL || `http://localhost:3001`;
 
 const Recipes = () => {
 
@@ -12,7 +12,7 @@ const Recipes = () => {
     useEffect(() => {
         async function Getdata() {
 
-            const recipes = await fetch(`http://localhost:3001/api/recipe`, { method: 'get' }).then(response => {
+            const recipes = await fetch(`${API}/api/recipe`, { method: 'get' }).then(response => {
                 if (response.ok) {
                     
                     return response.json();
