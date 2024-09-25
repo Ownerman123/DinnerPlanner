@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import RecipeCard from "../components/recipeStuff/RecipeCard"
 import { useAuth } from "../auth/useAuth"
 
-
+const API = import.meta.env.VITE_API_URL || `http://localhost:3001`;
 
 const UsersRecipes = () => {
 
@@ -18,7 +18,7 @@ const UsersRecipes = () => {
             if(user){
 
                 
-                const recipes = await fetch(`http://localhost:3001/api/recipe/user/${user.id}`, { method: 'get' }).then(response => {
+                const recipes = await fetch(`${API}/api/recipe/user/${user.id}`, { method: 'get' }).then(response => {
                     if (response.ok) {
                         
                         return response.json();

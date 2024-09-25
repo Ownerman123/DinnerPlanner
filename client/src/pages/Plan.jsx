@@ -5,6 +5,7 @@ import { Input, Button, IconButton } from "@chakra-ui/react";
 import { GiRollingDices } from "react-icons/gi";
 import ShoppingList from "../components/recipeStuff/ShoppingList"
 
+const API = import.meta.env.VITE_API_URL || `http://localhost:3001`;
 
 const Plan = () => {
 
@@ -24,7 +25,7 @@ const Plan = () => {
             
             if (user) {
                 
-                const newUserData = await fetch(`http://localhost:3001/api/user/${user._id}`, { method: 'get' }).then(response => {
+                const newUserData = await fetch(`${API}/api/user/${user._id}`, { method: 'get' }).then(response => {
                     
                     if (response.ok) {
                         
@@ -50,7 +51,7 @@ const Plan = () => {
     }, [user]);
 
     async function getPlan() {
-        await fetch('http://localhost:3001/api/user/plan', {
+        await fetch(`${API}/api/user/plan`, {
             method:"put",
             headers: {
                 'Content-Type': 'application/json',
@@ -74,7 +75,7 @@ const Plan = () => {
         });
     }
     async function getReroll(recipeId) {
-        await fetch(`http://localhost:3001/api/user/plan/roll`, {
+        await fetch(`${API}/api/user/plan/roll`, {
             method:"put",
             headers: {
                 'Content-Type': 'application/json',

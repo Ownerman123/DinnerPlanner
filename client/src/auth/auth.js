@@ -1,6 +1,10 @@
 import { jwtDecode } from 'jwt-decode';
 
 
+
+
+const AuthAPI = import.meta.env.VITE_AUTH_URL || `http://localhost:4001`;
+
 class AuthService {
     getProfile() {
         return jwtDecode(this.getToken());
@@ -11,7 +15,7 @@ class AuthService {
 
         if (this.isTokenExpired(token)) {
             console.log('getting new token');
-            const data = await fetch("http://localhost:4001/token",
+            const data = await fetch(`${AuthAPI}/token`,
                 {
                     method: "POST",
                     headers: {
@@ -58,7 +62,7 @@ class AuthService {
     async logout() {
         const token = JSON.parse(this.getRefToken());
 
-        await fetch("http://localhost:4001/logout", {
+        await fetch(`${AuthAPI}/logout`, {
             method: "DELETE",
             headers: {
                 'Content-Type': 'application/json',

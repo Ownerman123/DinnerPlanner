@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Heading ,Select,Input, InputGroup, InputLeftAddon, Button, Checkbox,Text } from "@chakra-ui/react";
 import PropTypes from 'prop-types';
 
-
+const API = import.meta.env.VITE_API_URL || `http://localhost:3001`;
 
 const ShoppingList = ({userData}) => {
 
@@ -44,7 +44,7 @@ const ShoppingList = ({userData}) => {
       
 
     const saveMiscList = async () => {
-        await fetch('http://localhost:3001/api/user/list/misc', {
+        await fetch(`${API}/api/user/list/misc`, {
             method:"put",
             headers: {
                 'Content-Type': 'application/json',

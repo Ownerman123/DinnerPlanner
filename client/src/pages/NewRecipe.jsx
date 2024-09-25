@@ -3,6 +3,8 @@ import { Button, Stack, Input, Textarea, FormControl, FormLabel, Select, InputLe
 import {CloseIcon, AddIcon} from "@chakra-ui/icons"
 import { useAuth } from "../auth/useAuth"
 
+const API = import.meta.env.VITE_API_URL || `http://localhost:3001`;
+
 const NewRecipe = () => {
 
     const { user } = useAuth();
@@ -105,7 +107,7 @@ const NewRecipe = () => {
         console.log("no empy", noEmpys);
         try {
 
-            const newRecipe = await fetch("http://localhost:3001/api/recipe", {
+            const newRecipe = await fetch(`${API}/api/recipe`, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',

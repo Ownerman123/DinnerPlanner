@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
 import { Button } from "@chakra-ui/react";
 
+const API = import.meta.env.VITE_API_URL || `http://localhost:3001`;
 
 const Recipe = () => {
 
@@ -17,7 +18,7 @@ const Recipe = () => {
     useEffect(() => {
         const fetchRecipeData = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/api/recipe/${id}`);
+                const response = await fetch(`${API}/api/recipe/${id}`);
                 if (!response.ok) throw response;
                 const data = await response.json();
                 setRecipeData(data);
@@ -32,7 +33,7 @@ const Recipe = () => {
         const fetchUserData = async () => {
             if (user?.id) {
                 try {
-                    const response = await fetch(`http://localhost:3001/api/user/book/${user._id}`);
+                    const response = await fetch(`${API}/api/user/book/${user._id}`);
                     if (!response.ok) throw response;
                     const data = await response.json();
                     setUserData(data);
@@ -65,7 +66,7 @@ const Recipe = () => {
     const handleAddToBook = async () => {
         if(userData){
 
-            const updatedUser = await fetch(`http://localhost:3001/api/user/book`,
+            const updatedUser = await fetch(`${API}/api/user/book`,
                 { 
                     method: 'put',
                     headers: {
@@ -92,7 +93,7 @@ const Recipe = () => {
         }
     }
     const handleRemoveFromBook = async () => {
-        const updatedUser = await fetch(`http://localhost:3001/api/user/book`,
+        const updatedUser = await fetch(`${API}/api/user/book`,
              { 
                 method: 'delete',
                 headers: {

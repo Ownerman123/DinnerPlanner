@@ -4,6 +4,9 @@ import { FormControl, FormHelperText, FormErrorMessage, FormLabel, Input, Box, B
 import { useState } from "react"
 import { useAuth } from "../auth/useAuth"
 
+const API = import.meta.env.VITE_API_URL || `http://localhost:3001`;
+const AuthAPI = import.meta.env.VITE_AUTH_URL || `http://localhost:4001`;
+
 const Registration = () => {
 
     function isEmail(string) {
@@ -42,7 +45,7 @@ const Registration = () => {
         setError('');
 
 
-        const data = await fetch('http://localhost:3001/api/user', {
+        const data = await fetch(`${API}/api/user`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -54,7 +57,7 @@ const Registration = () => {
         if (newuser._id) {
             try {
                 console.log(newuser);
-                const token = await fetch('http://localhost:4001/login', {
+                const token = await fetch(`${AuthAPI}/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -86,7 +89,7 @@ const Registration = () => {
 
         try {
 
-            const token = await fetch('http://localhost:4001/login', {
+            const token = await fetch(`${AuthAPI}/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
