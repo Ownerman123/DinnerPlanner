@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Stack, Input, Textarea, FormControl, FormLabel, Select, InputLeftAddon, InputGroup, Checkbox , ButtonGroup, IconButton,} from "@chakra-ui/react";
+import { Box, Button, Stack, Input, Textarea, FormControl, FormLabel, Select, InputRightAddon, InputGroup, Checkbox , ButtonGroup, IconButton, color,} from "@chakra-ui/react";
 import {CloseIcon, AddIcon} from "@chakra-ui/icons"
 import { useAuth } from "../auth/useAuth"
 
@@ -20,6 +20,7 @@ const NewRecipe = () => {
     const [ingredientInputs, setIngredientInputs] = useState([{name:'', amount:'', unit:'lb'}]);
     const [tagInputs, setTagInputs] = useState([]);
     const [tag, setTag] = useState('');
+    const [fetching, setfetching] = useState(false);
 
     const addIngredient = () => {
         setIngredientInputs([...ingredientInputs, {name:'', amount:'', unit:'lb'}]); // Add an empty string to the inputs array
@@ -107,6 +108,7 @@ const NewRecipe = () => {
         console.log("no empy", noEmpys);
         try {
 
+                setfetching(true);
             const newRecipe = await fetch(`${API}/api/recipe`, {
                 method: "POST",
                 headers: {
@@ -114,12 +116,14 @@ const NewRecipe = () => {
                 },
                 body: JSON.stringify({...noEmpys, author: user._id })
             });
+            const data = await newRecipe.json();
 
+            setfetching(false);
             
-           window.location.assign('/userrecipes');
+           window.location.assign(`/recipe/${data._id}`);
             return newRecipe;
         }catch (err){
-
+            setfetching(false);
             console.log("bad", err);
         }
     }
@@ -129,79 +133,84 @@ const NewRecipe = () => {
 
 
     return (
-        <>
+        <Box bg={'darkgrey'} color={'white'} p={3} >
             <FormControl isRequired>
-                <FormLabel>Meal Title</FormLabel>
-                <Input placeholder="Title" type="text" name="title" onChange={handleChange} />
+                <FormLabel color={'daccentBlue'}>Meal Title</FormLabel>
+                <Input borderColor={"daccentBlue"} placeholder="Title" type="text" name="title" onChange={handleChange} />
             </FormControl>
             <FormControl isRequired>
-                <FormLabel>Instructions</FormLabel>
-                <Textarea placeholder="instructions" type="text" name="instructions" onChange={handleChange} />
+                <FormLabel color={"daccentBlue"}  pt={3}>Instructions</FormLabel>
+                <Textarea borderColor={"daccentBlue"} placeholder="instructions" type="text" name="instructions" onChange={handleChange} />
             </FormControl>
 
-            <FormLabel>Ingredients</FormLabel>
-            <Stack spacing={4} p={3}>
+            <FormLabel pt={3} color={"daccentBlue"}>Ingredients</FormLabel>
+            <Stack spacing={4} py={3}>
                 {ingredientInputs.map((input, index) => (
                     <div key={index} style={{ marginBottom: '10px' }}>
-                        <InputGroup>
+                        <InputGroup borderLeftRadius={7}>
                             <Input
                                 type="text"
                                 value={input.name}
                                 minWidth={20}
                                 maxWidth={500}
+                                borderColor={"daccentBlue"}
                                 required = {true}
                                 onChange={(e) => handleIngredientInputChange(index, e.target.value)}
                                 placeholder="Ingredient"
                             />
-                            <InputLeftAddon minWidth='fit-content' pw={1} borderTopRightRadius={7} borderBottomRightRadius={7}>
+                            <InputRightAddon  color={'accentBlue'} minWidth='fit-content' pw={1} bg={'fillgrey'} borderRightRadius={7}  border={'1px'}>
                                 <Input
                                     type="number"
                                     value={input.amount}
                                     variant="unstyled"
                                     width={10}
                                     placeholder="0.00"
+                                    color={"daccentBlue"}
+                                    
                                     onChange={(e) => handleAmountInputChange(index, e.target.value)}
                                 />
-                                <Select title='Units' value={input.unit} variant="unstyled" width="fit-content" onChange={(e) => handleUnitInputChange(index, e.target.value)}>
-                                    <option value="lb">lb</option>
-                                    <option value="can">can</option>
-                                    <option value="cup">cup</option>
-                                    <option value="gram">gram</option>
-                                    <option value="kilogram">kilogram</option>
-                                    <option value="pinch">pinch</option>
-                                    <option value="tsp">tsp</option>
-                                    <option value="tbsp">tbsp</option>
-                                    <option value="fl oz">fl oz</option>
-                                    <option value="mL">mL</option>
-                                    <option value="oz">oz</option>
-                                    <option value="small">small</option>
-                                    <option value="medium">medium</option>
-                                    <option value="large">large</option>
-                                    <option value="count">count</option>
+                                <Select   title='Units' value={input.unit} variant="unstyled" width="fit-content" onChange={(e) => handleUnitInputChange(index, e.target.value)}>
+                                    <option style={{ color: "black" }} value="lb">lb</option>
+                                    <option style={{ color: "black" }} value="can">can</option>
+                                    <option style={{ color: "black" }} value="cup">cup</option>
+                                    <option style={{ color: "black" }} value="gram">gram</option>
+                                    <option style={{ color: "black" }} value="kilogram">kilogram</option>
+                                    <option style={{ color: "black" }} value="pinch">pinch</option>
+                                    <option style={{ color: "black" }} value="tsp">tsp</option>
+                                    <option style={{ color: "black" }} value="tbsp">tbsp</option>
+                                    <option style={{ color: "black" }} value="fl oz">fl oz</option>
+                                    <option style={{ color: "black" }} value="mL">mL</option>
+                                    <option style={{ color: "black" }} value="oz">oz</option>
+                                    <option style={{ color: "black" }} value="small">small</option>
+                                    <option style={{ color: "black" }} value="medium">medium</option>
+                                    <option style={{ color: "black" }} value="large">large</option>
+                                    <option style={{ color: "black" }} value="count">count</option>
 
                                 </Select>
                                 <button type="button" onClick={() => removeIngredient(index)}>
                                     Remove
                                 </button>
-                            </InputLeftAddon>
+                            </InputRightAddon>
                         </InputGroup>
                     </div>
                 ))}
             </Stack>
 
-            <Button onClick={addIngredient}>+ingredient</Button>
-            <FormLabel>Tags</FormLabel>
-            <InputGroup width={20}> 
+            <Button variant="colored" colorScheme="primaryGreen" onClick={addIngredient}>+ingredient</Button>
+            <FormLabel color={"daccentBlue"} pt={3}>Tags</FormLabel>
+            <InputGroup width={20} borderRadius={7}> 
             <Input  type="text"
                                 value={tag}
                                 minWidth={20}
                                 maxWidth={500}
+                                
+                                borderColor={"daccentBlue"}
                                 onChange={(e) => setTag(e.target.value)}
                                 placeholder="tag"
                                  />
-                                 <InputLeftAddon  borderTopRightRadius={7} borderBottomRightRadius={7}>
-                                 <IconButton aria-label='add tag' icon={<AddIcon />} onClick={()=>addTag(tag)} />
-                                 </InputLeftAddon>
+                                 
+                                 <IconButton aria-label='add tag' bg={'darkgrey'} variant={"colored"} colorScheme="primaryGreen" icon={<AddIcon color={"primaryGreen"}  />} onClick={()=>addTag(tag)} />
+                                 
             </InputGroup>
             
             <Stack>
@@ -215,11 +224,11 @@ const NewRecipe = () => {
                     </div>
                 ))
                 }
+            <Checkbox pt={3} onChange={handleSnackChange}>This is a snack</Checkbox>
+            <Button variant="colored" colorScheme="primaryGreen" disabled={fetching} onClick={createNewRecipe} maxWidth={"3xs"} type="submit">Submit</Button>
             </Stack>
 
-            <Checkbox onChange={handleSnackChange}>This is a snack</Checkbox>
-            <Button onClick={createNewRecipe} type="submit">Submit</Button>
-        </>
+        </Box>
     );
 }
 

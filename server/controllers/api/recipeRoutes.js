@@ -36,7 +36,7 @@ router.get('/book/:id', async (req, res) => {
 });
 router.get('/:id', async (req, res) => {
     try {
-        const recipe = await Recipe.findById(req.params.id);
+        const recipe = await Recipe.findById(req.params.id).populate('author', 'username');
         res.json(recipe);
     } catch (error) {
         res.status(500).json({ message: error });
@@ -76,6 +76,15 @@ router.post('/', async (req, res) => {
         res.json({ message: err }).status(400);
     }
 
+
+});
+router.delete('/:id', async (req, res) => {
+    try {
+        const recipe = await Recipe.findByIdAndDelete(req.params.id);
+        res.json({message:`Recipe ${recipe} deleted successfully`});
+    } catch (error) {
+        res.status(500).json({ message: error });
+    }
 
 });
 

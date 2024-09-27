@@ -120,6 +120,33 @@ const Recipe = () => {
         return updatedUser;
     }
 
+    const handleDeleteRecipe = async () => {
+        const updatedUser = await fetch(`${API}/api/recipe/${recipeData._id}`,
+             { 
+                method: 'delete',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                
+            }
+        ).then(response => {
+            if(response.ok){
+                return response.json();
+            }
+            throw response
+        }).then(data =>{
+            
+            console.log(data);
+    
+    }).finally(()=>{
+            window.location.assign('/userrecipes');
+    });
+    
+
+        return updatedUser;
+    }
+
+
    
 
 const addToBookButton = isLoggedIn ? (
@@ -128,11 +155,18 @@ const addToBookButton = isLoggedIn ? (
   </Button>
 ) : null;
 
+const deleteRecipeButton = user?.id === recipeData.author ? (
+    <Button onClick={handleDeleteRecipe}>
+      Delete Recipe?
+    </Button>
+  ) : null;
+
    // console.log(data);
     return (
         <>
             <p>{recipeData.title}</p>
             {addToBookButton}
+            {deleteRecipeButton}
             <h2>Ingredients</h2>
             <ul>
                 {recipeData.ingredients.map((ingredient) => (
@@ -141,7 +175,10 @@ const addToBookButton = isLoggedIn ? (
                     </li>
                 ))}
             </ul>
-            <p>{recipeData.instructions}</p>
+            <p>
+                {recipeData.instructions}
+            </p>
+            {recipeData.author?.username ? `Author: ${recipeData.author.username}` : null}
         </>
     );
 

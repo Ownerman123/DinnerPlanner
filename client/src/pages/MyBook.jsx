@@ -25,7 +25,7 @@ const MyBook = () => {
                     throw response;
                 }).then(data => {
                     setData(data);
-                    console.log(data);
+                    
                     
                 }).catch(err => {
                     console.log("Error fetching data", err);

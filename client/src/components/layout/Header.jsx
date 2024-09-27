@@ -1,6 +1,19 @@
-import { Heading } from "@chakra-ui/react"
-import { Link } from "react-router-dom";
+import {
+  Box,
+  Heading,
+  Flex,
+  Link,
+  Spacer,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Show,
+  IconButton,
+} from "@chakra-ui/react"
+import { Link as RouterLink } from "react-router-dom";
 import { useAuth } from "../../auth/useAuth";
+import { HamburgerIcon } from "@chakra-ui/icons";
 
 const Header = () => {
 
@@ -17,26 +30,78 @@ const Header = () => {
   };
 
   const logButton = isLoggedIn ? "Logout" : "Login/SignUp";
-  const loggedLinks = isLoggedIn ? ( 
-  <>
-  <Link to={'/newrecipe'}>Add new Recipe</Link>
-  <Link to={'/userrecipes'}>My Recipes</Link>
-  <Link to={'/userbook'}>My Book</Link>
-  <Link to={'/plan'}>Plan</Link>
-  </>
+  const loggedLinks = isLoggedIn ? (
+    <>
+      <Link p={3} as={RouterLink} to={'/newrecipe'}>Add New Recipe</Link>
+      <Link p={3} as={RouterLink} to={'/userrecipes'}>My Recipes</Link>
+      <Link p={3} as={RouterLink} to={'/userbook'}>My Book</Link>
+      <Link p={3} as={RouterLink} to={'/plan'}>Plan</Link>
+    </>
 
-) : <></>;
-  
+  ) : <></>;
+
 
   return (
-    <header>
-      <Heading><Link to={'/'}>Dinner Planner!</Link></Heading>
-      <nav>
-        <Link onClick={handleAuthAction}>{logButton}</Link>
-        <Link to={"/recipes"}>Discover</Link>
-        {loggedLinks}
-        
-      </nav>
+    <header >
+      <Box bg="darkgrey" color={'white'} minHeight={20}>
+        <Flex
+          w="100%"
+          h="100%"
+          p={0}
+          bg="palette.darkgrey"
+          borderBottom="2px"
+          borderColor="palette.grey"
+          alignContent={"center"}
+        >
+          <Heading><Link as={RouterLink} to={'/'}>Dinner Planner!</Link></Heading>
+          <Spacer></Spacer>
+          <nav>
+            <Show above="lg">
+              <Flex alignContent="center" height="100%" wrap="wrap" pr={1}>
+                <Link p={3} as={RouterLink} to={"/recipes"}>Discover</Link>
+                {loggedLinks}
+                <Link p={3} as={RouterLink} onClick={handleAuthAction}>{logButton}</Link>
+              </Flex>
+            </Show>
+            <Show below="lg">
+              <Flex alignContent="center" height="100%" wrap="wrap" pr={4}>
+                <Menu p={4} alignContent="center" color={'black'}>
+                  <MenuButton
+                    as={IconButton}
+                    aria-label="Options"
+                    icon={<HamburgerIcon color="white" />}
+                    variant="outline"
+                    alignContent="center"
+                    alignSelf="center"
+                  />
+                  <MenuList color={"black"}>
+                    <MenuItem as={RouterLink} to="/">
+                      Home
+                    </MenuItem>
+                    <MenuItem as={RouterLink} to="/newrecipe">
+                      Add New Recipe
+                    </MenuItem>
+                    <MenuItem as={RouterLink} to="/userrecipes">
+                      My Recipes
+                    </MenuItem>
+                    <MenuItem as={RouterLink} to="/userbook">
+                      My Book
+                    </MenuItem>
+                    <MenuItem as={RouterLink} to="/plan">
+                      Plan
+                    </MenuItem>
+                    <MenuItem as={RouterLink} to="/recipes">
+                      Discover
+                    </MenuItem>
+
+                  </MenuList>
+                </Menu>
+                <Link p={3} as={RouterLink} onClick={handleAuthAction}>{logButton}</Link>
+              </Flex>
+            </Show>
+          </nav>
+        </Flex>
+      </Box>
     </header>
   )
 }
