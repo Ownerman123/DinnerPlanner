@@ -15,7 +15,7 @@ const Registration = () => {
         return matcher.test(string);
     }
 
-    const { login: authLogin } = useAuth();
+    const { login: authLogin, isLoggedIn, logout } = useAuth();
 
     const [email, setEmail] = useState('');
     const [first, setFirst] = useState('');
@@ -128,7 +128,14 @@ const Registration = () => {
 
     const passwordsmatch = (p1, p2) => p1 === p2;
 
-
+if(isLoggedIn){
+    return (
+        <>
+        <p>You must log out before logging in to a seperate account</p>
+        <button onClick={async () => { await logout(); }}>Logout</button>
+        </>
+    )
+}
 
     return (
         <>
