@@ -25,6 +25,8 @@ const Registration = () => {
     const [last, setLast] = useState('');
     const [error, setError] = useState('');
 
+    const [fetching, setfetching] = useState(false);
+
 
     const handleEmailChange = (e) => setEmail(e.target.value);
     const handlePasswordChange = (e) => setPassword(e.target.value);
@@ -44,7 +46,7 @@ const Registration = () => {
         }
         setError('');
 
-
+        setfetching(true);
         const data = await fetch(`${API}/api/user`, {
             method: "POST",
             headers: {
@@ -68,9 +70,10 @@ const Registration = () => {
                 localStorage.setItem("authToken", JSON.stringify(tokensjson.accessToken));
                 localStorage.setItem('refreshToken', JSON.stringify(tokensjson.refreshToken));
                 authLogin(tokensjson.accessToken);
-
+                setfetching(false);
                 setError('')
             } catch (err) {
+                setfetching(false);
                 console.log(err);
             }
         } else {
@@ -89,6 +92,8 @@ const Registration = () => {
 
         try {
 
+            setfetching(true);
+
             const token = await fetch(`${AuthAPI}/login`, {
                 method: 'POST',
                 headers: {
@@ -104,12 +109,14 @@ const Registration = () => {
                 localStorage.setItem('refreshToken', JSON.stringify(tokensjson.refreshToken));
 
                 authLogin(tokensjson.accessToken);
+                setfetching(false);
 
             }else{
-
+                setfetching(false);
                 return setError('email or password incorrect');
             }
         } catch (err) {
+            setfetching(false);
             console.log(err);
         }
 
@@ -155,7 +162,7 @@ const Registration = () => {
 
                                 <Text>{error}</Text>
 
-                                <Button onClick={handleLogin} type="submit">Login</Button>
+                                <Button disabled={fetching} onClick={handleLogin} type="submit">Login</Button>
 
                             </Box>
                         </TabPanel>
@@ -232,7 +239,7 @@ const Registration = () => {
 
                                 <Text>{error}</Text>
 
-                                <Button onClick={handleSignup} type="submit">Submit</Button>
+                                <Button disabled={fetching} onClick={handleSignup} type="submit">Submit</Button>
 
                             </Box>
                         </TabPanel>
