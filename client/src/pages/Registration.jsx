@@ -97,14 +97,18 @@ const Registration = () => {
                 body: JSON.stringify({ email: email, password: password })
             });
             const tokensjson = await token.json();
-            localStorage.setItem("authToken", JSON.stringify(tokensjson.accessToken));
-            localStorage.setItem('refreshToken', JSON.stringify(tokensjson.refreshToken));
-            if (tokensjson) {
+            
+            if ('accessToken' in tokensjson) {
+                
+                localStorage.setItem("authToken", JSON.stringify(tokensjson.accessToken));
+                localStorage.setItem('refreshToken', JSON.stringify(tokensjson.refreshToken));
 
                 authLogin(tokensjson.accessToken);
 
+            }else{
+
+                return setError('email or password incorrect');
             }
-            setError('')
         } catch (err) {
             console.log(err);
         }
