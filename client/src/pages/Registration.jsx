@@ -28,7 +28,7 @@ const Registration = () => {
     const [fetching, setfetching] = useState(false);
 
 
-    const handleEmailChange = (e) => setEmail(e.target.value);
+    const handleEmailChange = (e) => setEmail(e.target.value.toLowerCase());
     const handlePasswordChange = (e) => setPassword(e.target.value);
     const handleVerifyPasswordChange = (e) => setVerifyPassword(e.target.value);
     const handleUserNameChange = (e) => setUserName(e.target.value);
@@ -204,7 +204,7 @@ if(isLoggedIn){
                                     <Input type='text' value={username} placeholder="Username..." onChange={handleUserNameChange} />
                                     {isEmpty(username) ? (
                                         <FormHelperText>
-                                            Enter the Username you'd like to signup with (This will be viewable by other users).
+                                            Enter the Username you'd like to signup with (This will be viewable by other users dont use your email). 
                                         </FormHelperText>
                                     ) : (
                                         <FormErrorMessage>Username is required.</FormErrorMessage>
