@@ -5,7 +5,7 @@ const Footer = () => {
     return (
         <Box
             as="footer"
-            bg="black"
+            bg="trimbluegrey"
             color="white"
             borderTop="1px solid"
             borderColor="gray.600"

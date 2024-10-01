@@ -55,6 +55,7 @@ const MyBook = () => {
 
     // console.log(data);
     return (
+        //  flexGrow={1}
         <>
 
             <h2>recipes</h2>

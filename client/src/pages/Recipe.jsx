@@ -163,6 +163,7 @@ const deleteRecipeButton = user?.id === recipeData.author ? (
 
    // console.log(data);
     return (
+          //  flexGrow={1}
         <>
             <p>{recipeData.title}</p>
             {addToBookButton}

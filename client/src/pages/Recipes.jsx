@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import RecipeCard from "../components/recipeStuff/RecipeCard"
+import { Box } from "@chakra-ui/react";
+import RecipePages from "../components/recipeStuff/RecipePages";
 
 const API = import.meta.env.VITE_API_URL || `http://localhost:3001`;
 
@@ -20,7 +22,7 @@ const Recipes = () => {
                 throw response;
             }).then(data => {
                 setData(data);
-                //console.log(data);
+                console.log(data);
 
             }).catch(err => {
                 console.log("Error fetching data", err);
@@ -49,9 +51,19 @@ const Recipes = () => {
 
    // console.log(data);
     return (
+          
         <>
-            
-            <h2>recipes</h2>
+            <Box
+            bg={'radial-gradient(circle at top left, #9fc0d1, #608da4)'}
+            flexGrow={1}
+            color={'white'}
+            p={3}
+            height='auto'
+        >
+
+            <RecipePages recipes={data}></RecipePages>
+
+            {/* <h2>recipes</h2>
             <ul>
                 {data ? data.map((recipe) => (
                     <li key={recipe.id} >
@@ -60,8 +72,9 @@ const Recipes = () => {
                     
                     
                 )) : <li> nope</li> }
-            </ul>
+            </ul> */}
             
+                </Box>
         </>
     );
 

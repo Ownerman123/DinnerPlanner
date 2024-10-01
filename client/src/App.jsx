@@ -14,7 +14,7 @@ function App() {
     <AuthProvider>
       <Header />
       <Outlet />
-      <Box id="filler" bg="darkgrey"></Box>
+      <Box id="filler" bg='#9fc0d1'></Box>
       <Footer />
     </AuthProvider>
     </>

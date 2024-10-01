@@ -4,7 +4,7 @@
     flex-direction: column;
   }
   #filler {
-    flex-grow: 1;
+    flex-grow: 0;
   }
   @media (prefers-color-scheme: light) {
   }

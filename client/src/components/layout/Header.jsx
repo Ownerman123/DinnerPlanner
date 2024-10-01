@@ -43,14 +43,12 @@ const Header = () => {
 
   return (
     <header >
-      <Box bg="darkgrey" color={'white'} minHeight={20}>
+      <Box bg="trimbluegrey" color={'offwhite'} >
         <Flex
           w="100%"
           h="100%"
           p={0}
-          bg="palette.darkgrey"
-          borderBottom="2px"
-          borderColor="palette.grey"
+          borderBottom="1px"
           alignContent={"center"}
         >
           <Heading><Link as={RouterLink} to={'/'}>Dinner Planner!</Link></Heading>
@@ -70,7 +68,7 @@ const Header = () => {
                     as={IconButton}
                     aria-label="Options"
                     icon={<HamburgerIcon color="white" />}
-                    variant="outline"
+                    variant={'iconButt'}
                     alignContent="center"
                     alignSelf="center"
                   />

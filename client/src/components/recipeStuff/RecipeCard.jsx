@@ -1,19 +1,37 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { Box, Container, Image , Tag, Heading, HStack, Text} from "@chakra-ui/react";
 
 
-const RecipeCard = ({recipe}) => {
+const RecipeCard = ({ recipe }) => {
 
- 
- 
+
+
 
 
 
   return (
-        
-        <Link to={`/recipe/${recipe.id}`}>{recipe.title}</Link>
+    <Box borderRadius={'lg'} bgColor={'cardlightblue'} color={'black'} m={5} p={2} boxShadow={'xl'}>
+      <Link to={`/recipe/${recipe.id}`}  p={2} ><Heading bg={'bgmidblue'} noOfLines={1} maxWidth={'100%'} borderRadius={'lg'}  p={2} size={"md"}>{recipe.title}</Heading></Link>
+      <HStack>
+
+      <Image
+        src={recipe?.imgUrl ? `${recipe.imgUrl}` : 'https://placehold.co/200x200'}
+        boxSize='200px'
+        alt={recipe.title}
+        p={3}
+        />
+        <Text bg={"offwhite"} borderRadius={'lg'} p={3} noOfLines={5} flexGrow={1} mr={3}>{recipe.instructions}</Text>
+        </HStack>
+      <Container >
+      { recipe.tags?.[0]?.tag ? <Tag m={1}bg={"trimbluegrey"} color={"offwhite"}>{recipe.tags[0].tag }</Tag> : null} 
+      { recipe.tags?.[1]?.tag ? <Tag m={1}bg={"trimbluegrey"} color={"offwhite"}>{recipe.tags[1].tag}</Tag> : null} 
+      { recipe.tags?.[2]?.tag ? <Tag m={1}bg={"trimbluegrey"} color={"offwhite"}>{recipe.tags[2].tag}</Tag> : null} 
+      {recipe.tags?.[3] ? `${recipe.tags.length - 3} more tags ...` : null}
+      </Container>
+    </Box>
   )
-     
+
 }
 
 RecipeCard.propTypes = {

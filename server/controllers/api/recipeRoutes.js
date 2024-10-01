@@ -7,7 +7,7 @@ const router = e.Router();
 //  "/api/recipe"
 router.get('/', async (req, res) => {
     try {
-        const recipes = await Recipe.find();
+        const recipes = await Recipe.find().populate('tags');
         res.json(recipes);
     } catch (error) {
         res.status(500).json({ message: error });
@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
 });
 router.get('/user/:id', async (req, res) => {
     try {
-        const recipes = await Recipe.find({ author: req.params.id });
+        const recipes = await Recipe.find({ author: req.params.id }).populate('tags');
         res.json(recipes);
     } catch (error) {
         res.status(500).json({ message: error });
@@ -26,7 +26,7 @@ router.get('/user/:id', async (req, res) => {
 router.get('/book/:id', async (req, res) => {
     try {
         const user = await User.findById({ _id: req.params.id });
-        const recipes = await Recipe.find({ _id: { $in: user.book } });
+        const recipes = await Recipe.find({ _id: { $in: user.book } }).populate('tags');
 
         res.json(recipes);
     } catch (error) {
@@ -36,7 +36,7 @@ router.get('/book/:id', async (req, res) => {
 });
 router.get('/:id', async (req, res) => {
     try {
-        const recipe = await Recipe.findById(req.params.id).populate('author', 'username');
+        const recipe = await Recipe.findById(req.params.id).populate('author', 'username').populate('tags');
         res.json(recipe);
     } catch (error) {
         res.status(500).json({ message: error });

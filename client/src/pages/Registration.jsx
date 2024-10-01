@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-escape */
 /* eslint-disable react/no-unescaped-entities */
-import { FormControl, FormHelperText, FormErrorMessage, FormLabel, Input, Box, Button, Text, TabPanel, Tab, Tabs, TabPanels, TabList } from "@chakra-ui/react"
+import { FormControl, FormHelperText, FormErrorMessage, FormLabel, Input, Box, Container, Button, Text, TabPanel, Tab, Tabs, TabPanels, TabList, Flex } from "@chakra-ui/react"
 import { useState } from "react"
 import { useAuth } from "../auth/useAuth"
 
@@ -102,16 +102,16 @@ const Registration = () => {
                 body: JSON.stringify({ email: email, password: password })
             });
             const tokensjson = await token.json();
-            
+
             if ('accessToken' in tokensjson) {
-                
+
                 localStorage.setItem("authToken", JSON.stringify(tokensjson.accessToken));
                 localStorage.setItem('refreshToken', JSON.stringify(tokensjson.refreshToken));
 
                 authLogin(tokensjson.accessToken);
                 setfetching(false);
 
-            }else{
+            } else {
                 setfetching(false);
                 return setError('email or password incorrect');
             }
@@ -128,130 +128,133 @@ const Registration = () => {
 
     const passwordsmatch = (p1, p2) => p1 === p2;
 
-if(isLoggedIn){
-    return (
-        <>
-        <p>You must log out before logging in to a seperate account</p>
-        <button onClick={async () => { await logout(); }}>Logout</button>
-        </>
-    )
-}
+    if (isLoggedIn) {
+        return (
+            <>
+                <p>You must log out before logging in to a seperate account</p>
+                <button onClick={async () => { await logout(); }}>Logout</button>
+            </>
+        )
+    }
 
     return (
         <>
-            <Box>
-                <Tabs>
-                    <TabList>
-                        <Tab>Login</Tab>
-                        <Tab>Sign Up</Tab>
-                    </TabList>
-                    <TabPanels>
+            <Box bg='radial-gradient(circle at top left, #9fc0d1, #608da4)'   flexGrow={1}>
+                <Container maxW="md" py={8} minH={'100%'} >
 
-                        <TabPanel>
+                    <Tabs bg="cardlightblue" border="2px" borderRadius="lg" borderColor="trimbluegrey" boxShadow='2xl'>
+                        <TabList bg="offwhite" borderTopRadius='lg' borderBottom='0'>
+                            <Tab>Login</Tab>
+                            <Tab>Sign Up</Tab>
+                        </TabList>
+                        <TabPanels>
 
-                            <Box width={500}>
-                                <FormControl isInvalid={!validEmail(email)}>
-                                    <FormLabel>Email</FormLabel>
-                                    <Input type='email' value={email} placeholder="Email..." onChange={handleEmailChange} />
-                                    {isEmpty(email) ? (
-                                        <FormHelperText>
-                                            <></>
-                                        </FormHelperText>
-                                    ) : (
-                                        <FormErrorMessage>Email is required.</FormErrorMessage>
-                                    )}
-                                </FormControl>
-                                <FormControl >
-                                    <FormLabel>Password</FormLabel>
-                                    <Input type='password' value={password} placeholder="Password..." onChange={handlePasswordChange} />
+                            <TabPanel>
 
-                                </FormControl>
+                                <Box width={"100%"}>
+                                    <FormControl isInvalid={!validEmail(email)} >
+                                        <FormLabel>Email</FormLabel>
+                                        <Input type='email' value={email} placeholder="Email..." onChange={handleEmailChange} bg='white' />
+                                        {isEmpty(email) ? (
+                                            <FormHelperText>
+                                                <></>
+                                            </FormHelperText>
+                                        ) : (
+                                            <FormErrorMessage>Email is required.</FormErrorMessage>
+                                        )}
+                                    </FormControl>
+                                    <FormControl >
+                                        <FormLabel>Password</FormLabel>
+                                        <Input type='password' value={password} placeholder="Password..." onChange={handlePasswordChange} bg='white' />
 
-                                <Text>{error}</Text>
+                                    </FormControl>
 
-                                <Button disabled={fetching} onClick={handleLogin} type="submit">Login</Button>
+                                    <Text>{error}</Text>
 
-                            </Box>
-                        </TabPanel>
-                        <TabPanel>
+                                    <Button disabled={fetching} mt={3} onClick={handleLogin} type="submit" colorScheme="trimbluegrey" variant= "colored">Login</Button>
 
-                            <Box width={500}>
+                                </Box>
+                            </TabPanel>
+                            <TabPanel>
 
-                                <FormControl isInvalid={!first}>
-                                    <FormLabel>First name</FormLabel>
-                                    <Input type='text' value={first} placeholder="First name..." onChange={handleFirstNameChange} />
-                                    {isEmpty(first) ? (
-                                        <FormHelperText>
-                                            Enter your first name.
-                                        </FormHelperText>
-                                    ) : (
-                                        <FormErrorMessage>first name is required</FormErrorMessage>
-                                    )}
-                                </FormControl>
-                                <FormControl isInvalid={isEmpty(last)}>
-                                    <FormLabel>Last name</FormLabel>
-                                    <Input type='text' value={last} placeholder="Last name..." onChange={handleLastNameChange} />
-                                    {isEmpty(last) ? (
-                                        <FormHelperText>
-                                            Enter your last name.
-                                        </FormHelperText>
-                                    ) : (
-                                        <FormErrorMessage>last name is required</FormErrorMessage>
-                                    )}
-                                </FormControl>
-                                <FormControl isInvalid={isEmpty(username)}>
-                                    <FormLabel>Username</FormLabel>
-                                    <Input type='text' value={username} placeholder="Username..." onChange={handleUserNameChange} />
-                                    {isEmpty(username) ? (
-                                        <FormHelperText>
-                                            Enter the Username you'd like to signup with (This will be viewable by other users dont use your email). 
-                                        </FormHelperText>
-                                    ) : (
-                                        <FormErrorMessage>Username is required.</FormErrorMessage>
-                                    )}
-                                </FormControl>
-                                <FormControl isInvalid={!validPassword(password)}>
-                                    <FormLabel>Password</FormLabel>
-                                    <Input type='password' value={password} placeholder="Password..." onChange={handlePasswordChange} />
-                                    {isEmpty(password) ? (
-                                        <FormHelperText>
-                                            Enter the password you'd like to signup with (must be atleast 8 characters in length).
-                                        </FormHelperText>
-                                    ) : (
-                                        <FormErrorMessage>Password must be atleast 8 characters in length.</FormErrorMessage>
-                                    )}
-                                </FormControl>
-                                <FormControl isInvalid={!passwordsmatch(password, verifyPassword)}>
-                                    <FormLabel>Verify Password</FormLabel>
-                                    <Input type='password' value={verifyPassword} placeholder="Password again..." onChange={handleVerifyPasswordChange} />
-                                    {isEmpty(verifyPassword) && !passwordsmatch(password, verifyPassword) ? (
-                                        <FormHelperText>
-                                            Enter the password you'd like to signup with again (must match exactly).
-                                        </FormHelperText>
-                                    ) : (
-                                        <FormErrorMessage> Both passwords must be typed exactly the same</FormErrorMessage>
-                                    )}
-                                </FormControl>
-                                <FormControl isInvalid={!validEmail(email)}>
-                                    <FormLabel>Email</FormLabel>
-                                    <Input type='email' value={email} placeholder="Email..." onChange={handleEmailChange} />
-                                    {isEmpty(email) ? (
-                                        <FormHelperText>
-                                            Enter the email you'd like to signup with.
-                                        </FormHelperText>
-                                    ) : (
-                                        <FormErrorMessage>Email is required.</FormErrorMessage>
-                                    )}
-                                </FormControl>
+                                <Box width={"100%"} >
 
-                                <Text>{error}</Text>
+                                    <FormControl isInvalid={!first}>
+                                        <FormLabel>First name</FormLabel>
+                                        <Input type='text' value={first} placeholder="First name..." onChange={handleFirstNameChange} bg='white' />
+                                        {isEmpty(first) ? (
+                                            <FormHelperText>
+                                                Enter your first name.
+                                            </FormHelperText>
+                                        ) : (
+                                            <FormErrorMessage>first name is required</FormErrorMessage>
+                                        )}
+                                    </FormControl>
+                                    <FormControl isInvalid={isEmpty(last)}>
+                                        <FormLabel>Last name</FormLabel>
+                                        <Input type='text' value={last} placeholder="Last name..." onChange={handleLastNameChange} bg='white' />
+                                        {isEmpty(last) ? (
+                                            <FormHelperText>
+                                                Enter your last name.
+                                            </FormHelperText>
+                                        ) : (
+                                            <FormErrorMessage>last name is required</FormErrorMessage>
+                                        )}
+                                    </FormControl>
+                                    <FormControl isInvalid={isEmpty(username)}>
+                                        <FormLabel>Username</FormLabel>
+                                        <Input type='text' value={username} placeholder="Username..." onChange={handleUserNameChange} bg='white' />
+                                        {isEmpty(username) ? (
+                                            <FormHelperText>
+                                                Enter the Username you'd like to signup with (This will be viewable by other users dont use your email).
+                                            </FormHelperText>
+                                        ) : (
+                                            <FormErrorMessage>Username is required.</FormErrorMessage>
+                                        )}
+                                    </FormControl>
+                                    <FormControl isInvalid={!validPassword(password)}>
+                                        <FormLabel>Password</FormLabel>
+                                        <Input type='password' value={password} placeholder="Password..." onChange={handlePasswordChange} bg='white' />
+                                        {isEmpty(password) ? (
+                                            <FormHelperText>
+                                                Enter the password you'd like to signup with (must be atleast 8 characters in length).
+                                            </FormHelperText>
+                                        ) : (
+                                            <FormErrorMessage>Password must be atleast 8 characters in length.</FormErrorMessage>
+                                        )}
+                                    </FormControl>
+                                    <FormControl isInvalid={!passwordsmatch(password, verifyPassword)}>
+                                        <FormLabel>Verify Password</FormLabel>
+                                        <Input type='password' value={verifyPassword} placeholder="Password again..." onChange={handleVerifyPasswordChange} bg='white' />
+                                        {isEmpty(verifyPassword) && !passwordsmatch(password, verifyPassword) ? (
+                                            <FormHelperText>
+                                                Enter the password you'd like to signup with again (must match exactly).
+                                            </FormHelperText>
+                                        ) : (
+                                            <FormErrorMessage> Both passwords must be typed exactly the same</FormErrorMessage>
+                                        )}
+                                    </FormControl>
+                                    <FormControl isInvalid={!validEmail(email)}>
+                                        <FormLabel>Email</FormLabel>
+                                        <Input type='email' value={email} placeholder="Email..." onChange={handleEmailChange} bg='white' />
+                                        {isEmpty(email) ? (
+                                            <FormHelperText>
+                                                Enter the email you'd like to signup with.
+                                            </FormHelperText>
+                                        ) : (
+                                            <FormErrorMessage>Email is required.</FormErrorMessage>
+                                        )}
+                                    </FormControl>
 
-                                <Button disabled={fetching} onClick={handleSignup} type="submit">Submit</Button>
+                                    <Text>{error}</Text>
 
-                            </Box>
-                        </TabPanel>
-                    </TabPanels>
-                </Tabs>
+                                    <Button disabled={fetching} mt={3} onClick={handleSignup} type="submit" colorScheme="trimbluegrey" variant= "colored">Submit</Button>
+
+                                </Box>
+                            </TabPanel>
+                        </TabPanels>
+                    </Tabs>
+                </Container>
             </Box>
         </>
     );

@@ -146,6 +146,7 @@ const Plan = () => {
 
 
     return (
+          //  flexGrow={1}
         <>
 
             <h2>Lets Plan</h2>

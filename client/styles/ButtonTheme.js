@@ -13,9 +13,9 @@ const colored = defineStyle((props) => {
   const { colorScheme: c } = props;
   return {
     fontFamily: "sans-serif",
-    bg: `fillgrey`,
+    bg: `${c}`,
     fontWeight: "semibold",
-    color: `${c}`,
+    color: `white`,
     borderRadius: "lg",
     borderColor: `${c}`,
     border: "1px",
@@ -27,8 +27,8 @@ const colored = defineStyle((props) => {
 
     _hover: {
       transform: "scale(1.02, 1.02)",
-      bg: `${c}`,
-      color: `fillgrey`,
+      bg: `green`,
+      
 
       _dark: {
         bg: `dark${c}`,
@@ -104,6 +104,23 @@ const otherpages = defineStyle((props) => {
     },
   };
 });
+
+const iconButt = defineStyle((props) => {
+  const { colorScheme: c } = props;
+  return {
+    borderColor: 'offwhite',
+    borderWidth: '1px',
+    borderRadius: 'lg',
+    
+    _hover: {
+      bg: "offwhite",
+      borderColor: 'black',
+
+    }
+  }
+});
+
+
 export const buttonTheme = defineStyleConfig({
   baseStyle,
   sizes,
@@ -111,8 +128,9 @@ export const buttonTheme = defineStyleConfig({
     colored: colored,
     currentpage: currentpage,
     otherpages: otherpages,
+    iconButt: iconButt
   },
   defaultProps: {
-    colorScheme: "purple",
+    colorScheme: "green",
   },
 });

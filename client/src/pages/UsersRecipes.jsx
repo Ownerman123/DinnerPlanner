@@ -56,6 +56,7 @@ const UsersRecipes = () => {
 
    // console.log(data);
     return (
+          //  flexGrow={1}
         <>
             
             <h2>Recipes</h2>
