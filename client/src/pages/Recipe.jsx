@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
-import { Button } from "@chakra-ui/react";
+import { Box, Image, Container, Button, HStack, Heading, Text } from "@chakra-ui/react";
 
 const API = import.meta.env.VITE_API_URL || `http://localhost:3001`;
 
 const Recipe = () => {
 
-    const {user, isLoggedIn } = useAuth();
+    const { user, isLoggedIn } = useAuth();
 
     const { id } = useParams();
     const [recipeData, setRecipeData] = useState(null);
@@ -64,123 +64,147 @@ const Recipe = () => {
         )
     }
     const handleAddToBook = async () => {
-        if(userData){
+        if (userData) {
 
             const updatedUser = await fetch(`${API}/api/user/book`,
-                { 
+                {
                     method: 'put',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({user: user.id, recipeId: id}) 
+                    body: JSON.stringify({ user: user.id, recipeId: id })
                 }
             ).then(response => {
-                if(response.ok){
+                if (response.ok) {
                     return response.json();
                 }
                 throw response
-            }).then(data =>{
+            }).then(data => {
                 console.log("set user after adition", data);
-            setUserData(data);
-            console.log(userData);
-            setRecipeInBook(data.book?.includes(id));
-            console.log("set recipe in book to",isRecipeInBook);
-        }).finally(()=>{
-            
-        });
-            
+                setUserData(data);
+                console.log(userData);
+                setRecipeInBook(data.book?.includes(id));
+                console.log("set recipe in book to", isRecipeInBook);
+            }).finally(() => {
+
+            });
+
             return updatedUser;
         }
     }
     const handleRemoveFromBook = async () => {
         const updatedUser = await fetch(`${API}/api/user/book`,
-             { 
+            {
                 method: 'delete',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({user: user.id, recipeId: id}) 
+                body: JSON.stringify({ user: user.id, recipeId: id })
             }
         ).then(response => {
-            if(response.ok){
+            if (response.ok) {
                 return response.json();
             }
             throw response
-        }).then(data =>{
+        }).then(data => {
             console.log("set user after removal", data);
-        setUserData(data);
-        console.log(userData);
-        setRecipeInBook(data.book?.includes(id));
-        console.log("set recipe in book to",isRecipeInBook);
-    }).finally(()=>{
-            
-    });
-    
+            setUserData(data);
+            console.log(userData);
+            setRecipeInBook(data.book?.includes(id));
+            console.log("set recipe in book to", isRecipeInBook);
+        }).finally(() => {
+
+        });
+
 
         return updatedUser;
     }
 
     const handleDeleteRecipe = async () => {
         const updatedUser = await fetch(`${API}/api/recipe/${recipeData._id}`,
-             { 
+            {
                 method: 'delete',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                
+
             }
         ).then(response => {
-            if(response.ok){
+            if (response.ok) {
                 return response.json();
             }
             throw response
-        }).then(data =>{
-            
+        }).then(data => {
+
             console.log(data);
-    
-    }).finally(()=>{
+
+        }).finally(() => {
             window.location.assign('/userrecipes');
-    });
-    
+        });
+
 
         return updatedUser;
     }
 
+    const handleEditRecipe = () => {
+        window.location.assign(`/editrecipe/${recipeData._id}`)
+    }
 
-   
 
-const addToBookButton = isLoggedIn ? (
-  <Button onClick={isRecipeInBook ? handleRemoveFromBook : handleAddToBook}>
-    {isRecipeInBook ? "Remove from Book" : "Add to Book"}
-  </Button>
-) : null;
 
-const deleteRecipeButton = user?.id === recipeData.author ? (
-    <Button onClick={handleDeleteRecipe}>
-      Delete Recipe?
-    </Button>
-  ) : null;
+    const addToBookButton = isLoggedIn ? (
+        <Button onClick={isRecipeInBook ? handleRemoveFromBook : handleAddToBook}>
+            {isRecipeInBook ? "Remove from Book" : "Add to Book"}
+        </Button>
+    ) : null;
 
-   // console.log(data);
+    const deleteRecipeButton = user?.id === recipeData.author.id ? (
+        <Button onClick={handleDeleteRecipe}>
+            Delete Recipe?
+        </Button>
+    ) : null;
+    const editRecipeButton = user?.id === recipeData.author.id ? (
+        <Button onClick={handleEditRecipe}>
+            Edit Recipe?
+        </Button>
+    ) : null;
+
+    // console.log(data);
     return (
-          //  flexGrow={1}
-        <>
-            <p>{recipeData.title}</p>
-            {addToBookButton}
-            {deleteRecipeButton}
-            <h2>Ingredients</h2>
-            <ul>
-                {recipeData.ingredients.map((ingredient) => (
-                    <li key={ingredient.name} >
-                        {ingredient.name + ' ' + ingredient.amount + ' ' +ingredient.unit}
-                    </li>
-                ))}
-            </ul>
-            <p>
-                {recipeData.instructions}
-            </p>
+        //  flexGrow={1}
+        <Box flexGrow={1} bg={'radial-gradient(circle at top left, #9fc0d1, #608da4)'}>
+            <HStack>
+                <Heading>{recipeData.title}</Heading>
+                {addToBookButton}
+                {deleteRecipeButton}
+                {editRecipeButton}
+            </HStack>
+            <Container centerContent>
+                
+            <Image  src={recipeData?.imgUrl ? `${recipeData.imgUrl}` : 'https://placehold.co/600x600'}
+        maxBlockSize={'500px'}
+        alt={recipeData.title}
+        p={3}/>
+        </Container>
+            <Heading>Ingredients</Heading>
+            <Container bg={'cardlightblue'} borderRadius={'lg'} p={2}>
+
+                <ul>
+                    {recipeData.ingredients.map((ingredient) => (
+                        <li key={ingredient.name} >
+                            {ingredient.name + ' ' + ingredient.amount + ' ' + ingredient.unit}
+                        </li>
+                    ))}
+                </ul>
+            </Container>
+            <Heading>Instructions</Heading>
+            <Container bg={'cardlightblue'} borderRadius={'lg'} p={2}>
+                <Text>
+                    {recipeData.instructions}
+                </Text>
+            </Container>
             {recipeData.author?.username ? `Author: ${recipeData.author.username}` : null}
-        </>
+        </Box>
     );
 
 }

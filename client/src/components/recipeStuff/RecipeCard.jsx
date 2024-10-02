@@ -21,7 +21,7 @@ const RecipeCard = ({ recipe }) => {
         alt={recipe.title}
         p={3}
         />
-        <Text bg={"offwhite"} borderRadius={'lg'} p={3} noOfLines={5} flexGrow={1} mr={3}>{recipe.instructions}</Text>
+        <Text bg={"offwhite"} borderRadius={'lg'} p={5}  noOfLines={4} flexGrow={1}  h={'200px'} >{recipe.instructions} </Text>
         </HStack>
       <Container >
       { recipe.tags?.[0]?.tag ? <Tag m={1}bg={"trimbluegrey"} color={"offwhite"}>{recipe.tags[0].tag }</Tag> : null} 
@@ -29,6 +29,7 @@ const RecipeCard = ({ recipe }) => {
       { recipe.tags?.[2]?.tag ? <Tag m={1}bg={"trimbluegrey"} color={"offwhite"}>{recipe.tags[2].tag}</Tag> : null} 
       {recipe.tags?.[3] ? `${recipe.tags.length - 3} more tags ...` : null}
       </Container>
+      {recipe.author?.username ? <Text>By: {recipe.author.username}</Text> : null}
     </Box>
   )
 

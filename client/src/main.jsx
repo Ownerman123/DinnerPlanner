@@ -17,6 +17,7 @@ import MyBook from './pages/MyBook.jsx'
 import Plan from './pages/Plan.jsx';
 
 import './index.css';
+import EditRecipe from './pages/EditRecipe.jsx';
 
 const reactRouter = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ const reactRouter = createBrowserRouter([
           {
             path: "/newrecipe",
             element: <NewRecipe />,
+          },
+          {
+            path: "/editrecipe/:id",
+            element: <EditRecipe />,
           },
           {
             path: "/userrecipes",
