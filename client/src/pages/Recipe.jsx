@@ -158,12 +158,12 @@ const Recipe = () => {
         </Button>
     ) : null;
 
-    const deleteRecipeButton = user?.id === recipeData.author.id ? (
+    const deleteRecipeButton = user?.id && recipeData?.author?.id && user.id === recipeData.author.id ? (
         <Button onClick={handleDeleteRecipe}>
             Delete Recipe?
         </Button>
     ) : null;
-    const editRecipeButton = user?.id === recipeData.author.id ? (
+    const editRecipeButton = user?.id && recipeData?.author?.id && user.id === recipeData.author.id ? (
         <Button onClick={handleEditRecipe}>
             Edit Recipe?
         </Button>

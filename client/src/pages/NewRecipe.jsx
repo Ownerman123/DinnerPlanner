@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Box, Wrap, Container, Button, Stack, Input, Textarea, FormControl, FormLabel, Select, InputRightAddon, InputGroup, Checkbox, ButtonGroup, IconButton, } from "@chakra-ui/react";
+import { useState, useRef } from "react";
+import { Box, Wrap, Container, Button, Image , Stack, Input, Textarea, FormControl, FormLabel, Select, InputRightAddon, InputGroup, Checkbox, ButtonGroup, IconButton, } from "@chakra-ui/react";
 import { CloseIcon, AddIcon } from "@chakra-ui/icons"
 import { useAuth } from "../auth/useAuth"
 
@@ -21,6 +21,8 @@ const NewRecipe = () => {
     const [tagInputs, setTagInputs] = useState([]);
     const [tag, setTag] = useState('');
     const [fetching, setfetching] = useState(false);
+    const [previewImg, setPreview] =useState(null);
+    const fileInputRef = useRef(null);
 
     const addIngredient = () => {
         setIngredientInputs([...ingredientInputs, { name: '', amount: '', unit: 'lb' }]); // Add an empty string to the inputs array
@@ -99,6 +101,14 @@ const NewRecipe = () => {
             snack: !formState.snack,
         });
     };
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          setFormState({...formState, image: file});
+          const previewUrl = URL.createObjectURL(file);
+          setPreview(previewUrl);
+        }
+      };
 
 
 
@@ -154,6 +164,29 @@ const NewRecipe = () => {
                         color="black"
                         onChange={handleChange} />
                 </FormControl>
+                <FormControl>
+                <FormLabel htmlFor="avatar">Cover Image</FormLabel>
+              <Input
+                id="image"
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                ref={fileInputRef}
+                display="none"
+              />
+              <Button onClick={() => fileInputRef.current.click()}>
+                Choose File
+              </Button>
+              {previewImg && (
+                <Image
+                  src={previewImg}
+                  alt="image preview"
+                  boxSize="100px"
+                  mt={2}
+                />
+              )}
+              
+            </FormControl>
                 <FormControl isRequired>
                     <FormLabel color={"black"} pt={3}>Instructions</FormLabel>
                     <Textarea
