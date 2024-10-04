@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { Box, Wrap, Container, Button, Image , Stack, Input, Textarea, FormControl, FormLabel, Select, InputRightAddon, InputGroup, Checkbox, ButtonGroup, IconButton, } from "@chakra-ui/react";
 import { CloseIcon, AddIcon } from "@chakra-ui/icons"
 import { useAuth } from "../auth/useAuth"
+import imageCompression from 'browser-image-compression';
 
 const API = import.meta.env.VITE_API_URL || `http://localhost:3001`;
 
@@ -110,10 +111,23 @@ const NewRecipe = () => {
         }
       };
 
+      const toBase64 = (file) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+      });
 
 
     const createNewRecipe = async () => {
+        const options = {
+            maxSizeKB: 40, // Max file size (in MB)
+            maxWidthOrHeight: 200, // Max width or height in pixels
+            useWebWorker: true, // Optional: enable web worker for faster processing
+          };
 
+        const compressed = await imageCompression(formState.image, options)
+        const base64Image = await toBase64(compressed);
         const noEmpys = { ...formState, ingredients: formState.ingredients.filter(ingredient => ingredient.name !== '') };
         console.log("no empy", noEmpys);
         try {
@@ -124,7 +138,7 @@ const NewRecipe = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ ...noEmpys, author: user._id })
+                body: JSON.stringify({ ...noEmpys, author: user._id, image: base64Image })
             });
             const data = await newRecipe.json();
 

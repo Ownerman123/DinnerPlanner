@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { Box, Wrap, Container, Button, Stack, Image, Input, Textarea, FormControl, FormLabel, Select, InputRightAddon, InputGroup, Checkbox, ButtonGroup, IconButton, } from "@chakra-ui/react";
 import { CloseIcon, AddIcon } from "@chakra-ui/icons"
 import { useAuth } from "../auth/useAuth"
+import imageCompression from 'browser-image-compression';
 
 const API = import.meta.env.VITE_API_URL || `http://localhost:3001`;
 
@@ -140,8 +141,22 @@ const EditRecipe = () => {
         }
       };
 
+      const toBase64 = (file) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+      });
 
     const saveRecipe = async () => {
+        const options = {
+            maxSizeKB: 40, // Max file size (in MB)
+            maxWidthOrHeight: 200, // Max width or height in pixels
+            useWebWorker: true, // Optional: enable web worker for faster processing
+          };
+
+        const compressed = await imageCompression(formState.image, options)
+        const base64Image = await toBase64(compressed);
         const justTagNames = {...formState, tags: formState.tags.map((tag) => (tag?.tag ? tag.tag : tag))}
         const noEmpys = { ...justTagNames, ingredients: justTagNames.ingredients.filter(ingredient => ingredient.name !== '') };
         const noIds = {...noEmpys, ingredients: noEmpys.ingredients.map((ingredient) => ({amount: ingredient.amount, name: ingredient.name , unit: ingredient.unit }))}
@@ -154,7 +169,7 @@ const EditRecipe = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ ...noEmpys, author: user._id})
+                body: JSON.stringify({ ...noIds, author: user._id , image: base64Image })
             });
             const data = await updatedRecipe.json();
 
