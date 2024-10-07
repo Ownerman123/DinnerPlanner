@@ -98,10 +98,7 @@ router.post('/', async (req, res) => {
     try {
 
         const recipe = await Recipe.create({ ...req.body, tags: [] });
-        if (req.body.image) {
-            const url = await uploadToCloudinary(req.body.image);
-            recipe.imgUrl = url;
-        }
+        
 
         if (req.body.image) {
             const base64String = req.body.image;
@@ -115,7 +112,10 @@ router.post('/', async (req, res) => {
 
             // Upload to Cloudinary
             const url = await uploadToCloudinary(buffer);
+           
             recipe.imgUrl = url; // Save the image URL in the recipe object
+            await recipe.save(); // Ensure imgUrl is saved to the database
+        
         }
 
         if (req.body.tags && req.body.tags.length > 0) {
@@ -142,6 +142,7 @@ router.post('/', async (req, res) => {
                 }
             }
         }
+        console.log(recipe);
         res.json(recipe).status(200);
     } catch (err) {
         res.json({ message: err }).status(400);
