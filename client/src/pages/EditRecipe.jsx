@@ -149,14 +149,18 @@ const EditRecipe = () => {
     });
 
     const saveRecipe = async () => {
-        const options = {
-            maxSizeKB: 40, // Max file size (in MB)
-            maxWidthOrHeight: 200, // Max width or height in pixels
-            useWebWorker: true, // Optional: enable web worker for faster processing
-        };
+        let base64Image = null;
+        if (formState.image) {
 
-        const compressed = await imageCompression(formState.image, options)
-        const base64Image = await toBase64(compressed);
+            const options = {
+                maxSizeKB: 40, // Max file size (in MB)
+                maxWidthOrHeight: 200, // Max width or height in pixels
+                useWebWorker: true, // Optional: enable web worker for faster processing
+            };
+
+            const compressed = await imageCompression(formState.image, options)
+            base64Image = await toBase64(compressed);
+        }
         const justTagNames = { ...formState, tags: formState.tags.map((tag) => (tag?.tag ? tag.tag : tag)) }
         const noEmpys = { ...justTagNames, ingredients: justTagNames.ingredients.filter(ingredient => ingredient.name !== '') };
         const noIds = { ...noEmpys, ingredients: noEmpys.ingredients.map((ingredient) => ({ amount: ingredient.amount, name: ingredient.name, unit: ingredient.unit })) }

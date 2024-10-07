@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Box, Wrap, Container, Button, Image , Stack, Input, Textarea, FormControl, FormLabel, Select, InputRightAddon, InputGroup, Checkbox, ButtonGroup, IconButton, } from "@chakra-ui/react";
+import { Box, Wrap, Container, Button, Image, Stack, Input, Textarea, FormControl, FormLabel, Select, InputRightAddon, InputGroup, Checkbox, ButtonGroup, IconButton, } from "@chakra-ui/react";
 import { CloseIcon, AddIcon } from "@chakra-ui/icons"
 import { useAuth } from "../auth/useAuth"
 import imageCompression from 'browser-image-compression';
@@ -22,7 +22,7 @@ const NewRecipe = () => {
     const [tagInputs, setTagInputs] = useState([]);
     const [tag, setTag] = useState('');
     const [fetching, setfetching] = useState(false);
-    const [previewImg, setPreview] =useState(null);
+    const [previewImg, setPreview] = useState(null);
     const fileInputRef = useRef(null);
 
     const addIngredient = () => {
@@ -105,29 +105,33 @@ const NewRecipe = () => {
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-          setFormState({...formState, image: file});
-          const previewUrl = URL.createObjectURL(file);
-          setPreview(previewUrl);
+            setFormState({ ...formState, image: file });
+            const previewUrl = URL.createObjectURL(file);
+            setPreview(previewUrl);
         }
-      };
+    };
 
-      const toBase64 = (file) => new Promise((resolve, reject) => {
+    const toBase64 = (file) => new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => resolve(reader.result);
         reader.onerror = (error) => reject(error);
-      });
+    });
 
 
     const createNewRecipe = async () => {
-        const options = {
-            maxSizeKB: 40, // Max file size (in MB)
-            maxWidthOrHeight: 200, // Max width or height in pixels
-            useWebWorker: true, // Optional: enable web worker for faster processing
-          };
+        let base64Image = null;
+        if (formState.image) {
 
-        const compressed = await imageCompression(formState.image, options)
-        const base64Image = await toBase64(compressed);
+            const options = {
+                maxSizeKB: 40, // Max file size (in MB)
+                maxWidthOrHeight: 200, // Max width or height in pixels
+                useWebWorker: true, // Optional: enable web worker for faster processing
+            };
+
+            const compressed = await imageCompression(formState.image, options)
+            base64Image = await toBase64(compressed);
+        }
         const noEmpys = { ...formState, ingredients: formState.ingredients.filter(ingredient => ingredient.name !== '') };
         console.log("no empy", noEmpys);
         try {
@@ -179,28 +183,28 @@ const NewRecipe = () => {
                         onChange={handleChange} />
                 </FormControl>
                 <FormControl>
-                <FormLabel htmlFor="avatar">Cover Image</FormLabel>
-              <Input
-                id="image"
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                ref={fileInputRef}
-                display="none"
-              />
-              <Button onClick={() => fileInputRef.current.click()}>
-                Choose File
-              </Button>
-              {previewImg && (
-                <Image
-                  src={previewImg}
-                  alt="image preview"
-                  boxSize="100px"
-                  mt={2}
-                />
-              )}
-              
-            </FormControl>
+                    <FormLabel htmlFor="avatar">Cover Image</FormLabel>
+                    <Input
+                        id="image"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        ref={fileInputRef}
+                        display="none"
+                    />
+                    <Button onClick={() => fileInputRef.current.click()}>
+                        Choose File
+                    </Button>
+                    {previewImg && (
+                        <Image
+                            src={previewImg}
+                            alt="image preview"
+                            boxSize="100px"
+                            mt={2}
+                        />
+                    )}
+
+                </FormControl>
                 <FormControl isRequired>
                     <FormLabel color={"black"} pt={3}>Instructions</FormLabel>
                     <Textarea
