@@ -5,38 +5,38 @@ import { useState } from "react";
 const RecipePages = ({ recipes }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const recipesPerPage = 5;
-  
+
     const indexOfLastRecipe = currentPage * recipesPerPage;
     const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
     const currentProblems = recipes.slice(
-      indexOfFirstRecipe,
-      indexOfLastRecipe
+        indexOfFirstRecipe,
+        indexOfLastRecipe
     );
-  
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  
-    return (
-      <VStack spacing={4} align="stretch">
-        {currentProblems.map((recipe) => (
-          <RecipeCard key={recipe._id} recipe={recipe} />
-        ))}
-        <HStack justifyContent="center" spacing={2}>
-          {Array.from({
-            length: Math.ceil(recipes.length / recipesPerPage),
-          }).map((_, index) => (
-            <Button
-              key={index}
-              onClick={() => paginate(index + 1)}
-              bg={'trimbluegrey'}
-              variant={currentPage === index + 1 ? "currentpage" : "otherpages"}
-              colorScheme={currentPage === index + 1 ? "bgmidblue" : "white"}
-            >
-              {index + 1}
-            </Button>
-          ))}
-        </HStack>
-      </VStack>
-    );
-  };
 
-  export default RecipePages;
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    return (
+        <VStack spacing={4} align="stretch">
+            {currentProblems.map((recipe) => (
+                <RecipeCard key={recipe._id} recipe={recipe} />
+            ))}
+            <HStack justifyContent="center" spacing={2}>
+                {Array.from({
+                    length: Math.ceil(recipes.length / recipesPerPage),
+                }).map((_, index) => (
+                    <Button
+                        key={index}
+                        onClick={() => paginate(index + 1)}
+                        bg={'trimbluegrey'}
+                        variant={currentPage === index + 1 ? "currentpage" : "otherpages"}
+                        colorScheme={currentPage === index + 1 ? "bgmidblue" : "white"}
+                    >
+                        {index + 1}
+                    </Button>
+                ))}
+            </HStack>
+        </VStack>
+    );
+};
+
+export default RecipePages;

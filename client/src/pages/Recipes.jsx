@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import RecipeCard from "../components/recipeStuff/RecipeCard"
+import SearchBar from "../components/common/SearchBar";
 import { Box } from "@chakra-ui/react";
 import RecipePages from "../components/recipeStuff/RecipePages";
 
@@ -16,7 +17,7 @@ const Recipes = () => {
 
             const recipes = await fetch(`${API}/api/recipe`, { method: 'get' }).then(response => {
                 if (response.ok) {
-                    
+
                     return response.json();
                 }
                 throw response;
@@ -49,21 +50,23 @@ const Recipes = () => {
         )
     }
 
-   // console.log(data);
+    // console.log(data);
     return (
-          
+
         <>
             <Box
-            bg={'radial-gradient(circle at top left, #9fc0d1, #608da4)'}
-            flexGrow={1}
-            color={'white'}
-            p={3}
-            height='auto'
-        >
+                bg={'radial-gradient(circle at top left, #9fc0d1, #608da4)'}
+                flexGrow={1}
+                color={'white'}
+                p={3}
+                height='auto'
+            >
 
-            <RecipePages recipes={data}></RecipePages>
+                <SearchBar setRecipeData={(e) => setData(e)}></SearchBar>
 
-            {/* <h2>recipes</h2>
+                <RecipePages recipes={data}></RecipePages>
+
+                {/* <h2>recipes</h2>
             <ul>
                 {data ? data.map((recipe) => (
                     <li key={recipe.id} >
@@ -73,8 +76,8 @@ const Recipes = () => {
                     
                 )) : <li> nope</li> }
             </ul> */}
-            
-                </Box>
+
+            </Box>
         </>
     );
 

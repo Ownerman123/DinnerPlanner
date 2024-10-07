@@ -1,4 +1,4 @@
-import { useState, useEffect , useRef} from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { Box, Wrap, Container, Button, Stack, Image, Input, Textarea, FormControl, FormLabel, Select, InputRightAddon, InputGroup, Checkbox, ButtonGroup, IconButton, } from "@chakra-ui/react";
 import { CloseIcon, AddIcon } from "@chakra-ui/icons"
@@ -10,13 +10,13 @@ const API = import.meta.env.VITE_API_URL || `http://localhost:3001`;
 const EditRecipe = () => {
 
 
-    const {id} = useParams();
+    const { id } = useParams();
     const { user } = useAuth();
-    
-    
+
+
     const [formState, setFormState] = useState({
         title: "",
-        image: null ,
+        image: null,
         instructions: "",
         ingredients: [{}],
         tags: [],
@@ -29,7 +29,7 @@ const EditRecipe = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [recipeData, setRecipeData] = useState(null);
-    const [previewImg, setPreview] =useState(null);
+    const [previewImg, setPreview] = useState(null);
     const fileInputRef = useRef(null);
     useEffect(() => {
         const fetchRecipeData = async () => {
@@ -49,11 +49,11 @@ const EditRecipe = () => {
             }
         };
 
-       
+
         fetchRecipeData();
-        
+
     }, [user, id]);
-    
+
     const addIngredient = () => {
         setIngredientInputs([...ingredientInputs, { name: '', amount: '', unit: 'lb' }]); // Add an empty string to the inputs array
 
@@ -135,31 +135,31 @@ const EditRecipe = () => {
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-          setFormState({...formState, image: file});
-          const previewUrl = URL.createObjectURL(file);
-          setPreview(previewUrl);
+            setFormState({ ...formState, image: file });
+            const previewUrl = URL.createObjectURL(file);
+            setPreview(previewUrl);
         }
-      };
+    };
 
-      const toBase64 = (file) => new Promise((resolve, reject) => {
+    const toBase64 = (file) => new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => resolve(reader.result);
         reader.onerror = (error) => reject(error);
-      });
+    });
 
     const saveRecipe = async () => {
         const options = {
             maxSizeKB: 40, // Max file size (in MB)
             maxWidthOrHeight: 200, // Max width or height in pixels
             useWebWorker: true, // Optional: enable web worker for faster processing
-          };
+        };
 
         const compressed = await imageCompression(formState.image, options)
         const base64Image = await toBase64(compressed);
-        const justTagNames = {...formState, tags: formState.tags.map((tag) => (tag?.tag ? tag.tag : tag))}
+        const justTagNames = { ...formState, tags: formState.tags.map((tag) => (tag?.tag ? tag.tag : tag)) }
         const noEmpys = { ...justTagNames, ingredients: justTagNames.ingredients.filter(ingredient => ingredient.name !== '') };
-        const noIds = {...noEmpys, ingredients: noEmpys.ingredients.map((ingredient) => ({amount: ingredient.amount, name: ingredient.name , unit: ingredient.unit }))}
+        const noIds = { ...noEmpys, ingredients: noEmpys.ingredients.map((ingredient) => ({ amount: ingredient.amount, name: ingredient.name, unit: ingredient.unit })) }
         console.log("no empy", noIds);
         try {
 
@@ -169,7 +169,7 @@ const EditRecipe = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ ...noIds, author: user._id , image: base64Image })
+                body: JSON.stringify({ ...noIds, author: user._id, image: base64Image })
             });
             const data = await updatedRecipe.json();
 
@@ -221,28 +221,28 @@ const EditRecipe = () => {
                         onChange={handleChange} />
                 </FormControl>
                 <FormControl>
-              <FormLabel htmlFor="avatar">Cover Image</FormLabel>
-              <Input
-                id="image"
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                ref={fileInputRef}
-                display="none"
-              />
-              <Button onClick={() => fileInputRef.current.click()}>
-                Choose File
-              </Button>
-              {previewImg && (
-                <Image
-                  src={previewImg}
-                  alt="image preview"
-                  boxSize="100px"
-                  mt={2}
-                />
-              )}
-              
-            </FormControl>
+                    <FormLabel htmlFor="avatar">Cover Image</FormLabel>
+                    <Input
+                        id="image"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        ref={fileInputRef}
+                        display="none"
+                    />
+                    <Button onClick={() => fileInputRef.current.click()}>
+                        Choose File
+                    </Button>
+                    {previewImg && (
+                        <Image
+                            src={previewImg}
+                            alt="image preview"
+                            boxSize="100px"
+                            mt={2}
+                        />
+                    )}
+
+                </FormControl>
                 <FormControl isRequired>
                     <FormLabel color={"black"} pt={3}>Instructions</FormLabel>
                     <Textarea
