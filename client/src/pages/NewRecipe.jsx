@@ -248,7 +248,7 @@ const NewRecipe = () => {
                                         width={10}
                                         placeholder="0.00"
 
-                                        color={"black"}
+                                        color={"white"}
 
                                         onChange={(e) => handleAmountInputChange(index, e.target.value)}
                                     />
