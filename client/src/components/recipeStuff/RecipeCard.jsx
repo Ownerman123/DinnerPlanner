@@ -12,7 +12,7 @@ const RecipeCard = ({ recipe }) => {
 
   return (
     <Box borderRadius={'lg'} bgColor={'cardlightblue'} color={'black'} m={5} p={2} boxShadow={'xl'}>
-      <Link to={`/recipe/${recipe.id}`} p={2} ><Heading bg={'bgmidblue'} noOfLines={1} maxWidth={'100%'} borderRadius={'lg'} p={2} size={"md"}>{recipe.title}</Heading></Link>
+      <Link to={`/recipe/${recipe._id}`} p={2} ><Heading bg={'bgmidblue'} noOfLines={1} maxWidth={'100%'} borderRadius={'lg'} p={2} size={"md"}>{recipe.title}</Heading></Link>
       <HStack>
 
         <Image

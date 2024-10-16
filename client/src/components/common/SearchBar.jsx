@@ -20,6 +20,7 @@ const SearchBar = ({setRecipeData}) => {
       }
 
       const data = await response.json();
+      console.log(data);
       setRecipeData(data);
     } catch (error) {
       console.error('Error searching recipes:', error);
