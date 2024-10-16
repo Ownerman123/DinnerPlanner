@@ -54,7 +54,16 @@ const Recipe = () => {
 
     if (loading) {
         return (
-            <p>loading...</p>
+            <Box
+            bg={'radial-gradient(circle at top left, #9fc0d1, #608da4)'}
+            flexGrow={1}
+            color={'white'}
+            p={3}
+            height='auto'
+        >
+
+        <p>loading...</p>
+        </Box>
         )
     }
     if (error) {

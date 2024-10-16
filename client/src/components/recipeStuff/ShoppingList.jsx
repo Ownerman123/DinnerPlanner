@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Heading ,Select,Input, InputGroup, InputLeftAddon, Button, Checkbox,Text } from "@chakra-ui/react";
+import { Heading ,Select,Input, InputGroup, InputRightAddon, Button, Checkbox,Text } from "@chakra-ui/react";
 import PropTypes from 'prop-types';
 
 const API = import.meta.env.VITE_API_URL || `http://localhost:3001`;
@@ -149,8 +149,10 @@ const ShoppingList = ({userData}) => {
                                 required = {true}
                                 onChange={(e) => handleItemInputChange(index, e.target.value)}
                                 placeholder="Item"
+                                bg={"white"}
+                                color={"black"}
                             />
-                            <InputLeftAddon minWidth='fit-content' pw={1} borderTopRightRadius={7} borderBottomRightRadius={7}>
+                            <InputRightAddon minWidth='fit-content' pw={1} borderTopRightRadius={7} borderBottomRightRadius={7} bg={'trimbluegrey'}>
                                 <Input
                                     type="number"
                                     value={input.amount}
@@ -160,32 +162,32 @@ const ShoppingList = ({userData}) => {
                                     onChange={(e) => handleAmountInputChange(index, e.target.value)}
                                 />
                                 <Select title='Units' value={input.unit} variant="unstyled" width="fit-content" onChange={(e) => handleUnitInputChange(index, e.target.value)}>
-                                    <option value="lb">lb</option>
-                                    <option value="can">can</option>
-                                    <option value="cup">cup</option>
-                                    <option value="gram">gram</option>
-                                    <option value="kilogram">kilogram</option>
-                                    <option value="pinch">pinch</option>
-                                    <option value="tsp">tsp</option>
-                                    <option value="tbsp">tbsp</option>
-                                    <option value="fl oz">fl oz</option>
-                                    <option value="mL">mL</option>
-                                    <option value="oz">oz</option>
-                                    <option value="small">small</option>
-                                    <option value="medium">medium</option>
-                                    <option value="large">large</option>
-                                    <option value="count">count</option>
+                                    <option style={{ color: "black" }} value="lb">lb</option>
+                                    <option style={{ color: "black" }} value="can">can</option>
+                                    <option style={{ color: "black" }} value="cup">cup</option>
+                                    <option style={{ color: "black" }} value="gram">gram</option>
+                                    <option style={{ color: "black" }} value="kilogram">kilogram</option>
+                                    <option style={{ color: "black" }} value="pinch">pinch</option>
+                                    <option style={{ color: "black" }} value="tsp">tsp</option>
+                                    <option style={{ color: "black" }} value="tbsp">tbsp</option>
+                                    <option style={{ color: "black" }} value="fl oz">fl oz</option>
+                                    <option style={{ color: "black" }} value="mL">mL</option>
+                                    <option style={{ color: "black" }} value="oz">oz</option>
+                                    <option style={{ color: "black" }} value="small">small</option>
+                                    <option style={{ color: "black" }} value="medium">medium</option>
+                                    <option style={{ color: "black" }} value="large">large</option>
+                                    <option style={{ color: "black" }} value="count">count</option>
 
                                 </Select>
                                 <button type="button" onClick={() => removeItem(index)}>
                                     Remove
                                 </button>
-                            </InputLeftAddon>
+                            </InputRightAddon>
                         </InputGroup>
                     </div>
                 ))}
             </ul>
-            <Button onClick={addItem}>+item</Button>
+            <Button onClick={addItem} mr={3}>+item</Button>
             <Button onClick={saveMiscList}>Save list</Button>
 
         </>

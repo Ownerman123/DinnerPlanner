@@ -4,7 +4,7 @@ import { useState } from "react";
 
 const RecipePages = ({ recipes }) => {
     const [currentPage, setCurrentPage] = useState(1);
-    const recipesPerPage = 5;
+    const recipesPerPage = 10;
 
     const indexOfLastRecipe = currentPage * recipesPerPage;
     const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
