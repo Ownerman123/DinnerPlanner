@@ -147,8 +147,12 @@ const NewRecipe = () => {
             const data = await newRecipe.json();
 
             setfetching(false);
-
-            window.location.assign(`/recipe/${data._id}`);
+            if (data && data._id) {
+                localStorage.setItem("test values", JSON.stringify(data));
+                window.location.assign(`/recipe/${data._id}`);
+            } else {
+                console.error("No ID found in response data:", data);
+            }
             return newRecipe;
         } catch (err) {
             setfetching(false);

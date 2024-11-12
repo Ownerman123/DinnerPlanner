@@ -1,19 +1,29 @@
-import { useEffect, useState } from "react";
-import { Heading ,Select,Input, InputGroup, InputRightAddon, Button, Checkbox,Text } from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
+import { Heading ,Select,Input, InputGroup, InputRightAddon, Button, Checkbox,Text , HStack} from "@chakra-ui/react";
 import PropTypes from 'prop-types';
 
 const API = import.meta.env.VITE_API_URL || `http://localhost:3001`;
 
 const ShoppingList = ({userData}) => {
 
-    const [itemInputs, setItemInputs] = useState(convertGroupedToUngrouped(userData.miscShopingList));
+    const [itemInputs, setItemInputs] = useState([]);
     const [mealList, setMealList] = useState([]);
     const [miscList, setMiscList] = useState([]);
+    const visibility = useRef(true);
+    visibility.current = true;
+
+    const mealListRef = useRef([]);
+
+    useEffect(() => {
+      // Update the ref whenever mealList changes
+      mealListRef.current = mealList;
+    }, [mealList]);
 
     useEffect(() => {
 
+           // console.log(userData);
 
-        
+                    setItemInputs(convertGroupedToUngrouped(userData.miscShopingList));
                     setMealList([...userData.planShopingList]);
                     setMiscList([...userData.miscShopingList]);
 
@@ -24,7 +34,9 @@ const ShoppingList = ({userData}) => {
 
     function convertGroupedToUngrouped(items) {
         const ungroupedItems = [];
-      
+      if(items === undefined) {
+        return ungroupedItems;
+      }
         // Loop through each ingredient
         items.forEach(item => {
           // Loop through each amount in the amounts array
@@ -44,6 +56,7 @@ const ShoppingList = ({userData}) => {
       
 
     const saveMiscList = async () => {
+        console.log(mealList);
         await fetch(`${API}/api/user/list/misc`, {
             method:"put",
             headers: {
@@ -68,6 +81,30 @@ const ShoppingList = ({userData}) => {
         });
     }
 
+    const saveMealList= async () => {
+
+        if(mealListRef.current.length !== 0){
+
+            await fetch(`${API}/api/user/list/meal`, {
+                method:"put",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ user: userData._id, list: mealListRef.current})
+            }).then(response => {
+                
+                if (response.ok) {
+                  //  console.log('saved');
+                    return response.json();
+                }
+                throw response;
+            }).catch(err => {
+                console.log("Error fetching data", err);
+                
+            });
+        }
+        
+    }
     const addItem = () => {
         setItemInputs([...itemInputs, {name:'', amount:'', unit:'lb'}]); // Add an empty string to the inputs array
         
@@ -109,12 +146,49 @@ const ShoppingList = ({userData}) => {
         console.log(miscList);
     };
     const handleCheck = (index,) =>{
-        console.log('chcekcing');
+       // console.log('checking');
         const newlist = [...mealList];
         newlist[index] = {...newlist[index], checked: !newlist[index].checked}
         setMealList([...newlist]);
+       // console.log(mealList);
     }
+    
+    document.addEventListener('visibilitychange', async () => {
+        console.log('visiblityChanged');
+        if (document.visibilityState === 'hidden' && visibility.current) {
+            try {
+                visibility.current = false;
+               // console.log("visiblity" , visibility);
+                    
+                if(mealListRef.current.length !== 0){
 
+                   // console.log('saving this data',  mealListRef.current);
+                    await saveMealList();
+                }
+                    
+                
+            } catch (error) {
+                console.error('Error saving data:', error);
+                
+            }
+        }
+    });
+
+    document.addEventListener('visibilitychange', async () => {
+        if(document.visibilityState === "visible"  && !visibility.current) {
+            visibility.current = true;
+           // console.log("visiblity" , visibility);
+        }
+    })
+    
+    window.addEventListener('beforeunload', async () => {
+       // console.log('before unload');
+        try {
+            await saveMealList();
+        } catch (error) {
+            console.error('Error saving data:', error);
+        }
+    });
     
     return (
         <>
@@ -122,6 +196,8 @@ const ShoppingList = ({userData}) => {
             <ul>
                 {mealList ? mealList.map((item , index) => (
                     <li key={item.name}>
+                        <HStack>
+
                         <Text fontSize='sm' as={item.checked ? 'del' : null}>
                             {item.name} {item.amounts.map((amount) => (<span key={amount.unit}>
                 {amount.amount} {amount.unit}
@@ -129,7 +205,8 @@ const ShoppingList = ({userData}) => {
               </span>)) }
                             </Text>
               
-              <Checkbox defaultValue={item.checked} onChange={()=>handleCheck(index)}/>
+              <Checkbox defaultChecked={item.checked} onChange={()=>handleCheck(index)}/>
+                        </HStack>
                     </li>
                     
                     

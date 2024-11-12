@@ -1,5 +1,7 @@
 import e from "express";
-import { User, Recipe } from "../../models/index.js"
+import { User, Recipe, Ingredient } from "../../models/index.js"
+import OpenAI from "openai";
+const openai = new OpenAI();
 
 
 
@@ -105,7 +107,9 @@ router.put('/plan', async (req, res) => {
 
         user.plan.push(...randomMeals, ...randomsnacks);
         user.planShopingList = await generateRecipeShoppingList(user.plan);
+       
         await user.save();
+        console.log(user);
 
         const newplan = await User.findOne({ _id: req.body.user }).populate('book').populate('plan')
         res.json(newplan).status(200);
@@ -148,6 +152,7 @@ router.put('/plan/roll', async (req, res) => {
         user.plan.pull({ _id: req.body.id });
         user.plan.push(newRecipe);
         user.planShopingList = await generateRecipeShoppingList(user.plan.map(recipe => recipe._id));
+        
         await user.save();
 
         const newplan = await User.findOne({ _id: req.body.user }).populate('book').populate('plan')
@@ -189,21 +194,34 @@ try {
 }
 
 });
+router.put('/list/meal', async (req, res) => {
+try {
+    console.log("list" ,req.body.list);
+    const user = await User.findOne({ _id: req.body.user }).select('-password');
+    user.planShopingList = req.body.list;
+    await user.save();
+    res.status(200).json(user);
+} catch (err) {
+    res.json({message: err}).status(500);
+}
+
+});
 
 async function generateRecipeShoppingList(recipeIds) {
     try {
         // Fetch recipes by ids
-        const recipes = await Recipe.find({ _id: { $in: recipeIds } }).lean();
-
+        const recipes = await Recipe.find({ _id: { $in: recipeIds } }).populate('ingredients.ingredient').lean();
+console.log("RECIPES" ,recipes);
         const shoppingList = {};
 
         // Loop through each recipe and its ingredients
         recipes.forEach(recipe => {
-            recipe.ingredients.forEach(({ name, amount, unit }) => {
+            recipe.ingredients.forEach(({ingredient, name, amount, unit }) => {
                 
                 if (!shoppingList[name]) {
                     // If ingredient not in list, add it with the amount and unit
-                    shoppingList[name] = [{ amount, unit }];
+                    shoppingList[name] = [{ amount: parseFloat(amount) || 0 , unit, category: ingredient?.category || 'misc' }];
+                    console.log(ingredient?.category || 'no sir')
                 } else {
                     // If ingredient exists, check if there's already an entry with the same unit
                     let ingredientEntry = shoppingList[name].find(entry => entry.unit === unit);
@@ -222,9 +240,10 @@ async function generateRecipeShoppingList(recipeIds) {
         // The shoppingList object now contains ingredients grouped by name, with units and amounts combined
         const formattedShoppingList = Object.keys(shoppingList).map(name => ({
             name,
+            category: shoppingList[name][0]?.category  || 'misc',
             amounts: shoppingList[name] // Assign the array of { amount, unit } objects directly
         }));
-
+console.log(formattedShoppingList);
         return formattedShoppingList;
 
     } catch (error) {

@@ -17,10 +17,13 @@ const recipeSchema = new Schema(
         },
         ingredients: [
             {
-                name:{
-                    type: String,
-                    trim: true,
+                ingredient:{
+                    type: Schema.Types.ObjectId,
+                    ref: "Ingredient",
                 } ,
+                name: {
+                    type: String
+                },
                 amount: {
                     type: String,
                     trim: true,

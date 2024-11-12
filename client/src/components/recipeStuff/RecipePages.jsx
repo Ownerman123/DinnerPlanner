@@ -8,7 +8,12 @@ const RecipePages = ({ recipes }) => {
 
     const indexOfLastRecipe = currentPage * recipesPerPage;
     const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-    const currentProblems = recipes.slice(
+    if(recipes.message){
+        return (
+            <p>{recipes.message}</p>
+        )
+    }
+    const currentRecipes = recipes.slice(
         indexOfFirstRecipe,
         indexOfLastRecipe
     );
@@ -17,7 +22,7 @@ const RecipePages = ({ recipes }) => {
 
     return (
         <VStack spacing={4} align="stretch">
-            {currentProblems.map((recipe) => (
+            {currentRecipes.map((recipe) => (
                 <RecipeCard key={recipe._id} recipe={recipe} />
             ))}
             <HStack justifyContent="center" spacing={2}>
