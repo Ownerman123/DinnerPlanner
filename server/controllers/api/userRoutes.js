@@ -1,7 +1,12 @@
 import e from "express";
 import { User, Recipe, Ingredient } from "../../models/index.js"
 import OpenAI from "openai";
-const openai = new OpenAI();
+import dotenv from "dotenv";
+
+dotenv.config();
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+});
 
 
 
