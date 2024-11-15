@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import { Heading ,Select,Input, InputGroup, InputRightAddon, Button, Checkbox,Text , HStack} from "@chakra-ui/react";
+import { useEffect, useRef, useState, } from "react";
+import { Heading, Select, Input, InputGroup, InputRightAddon, Button, Checkbox, Text, HStack } from "@chakra-ui/react";
 import PropTypes from 'prop-types';
 
 const API = import.meta.env.VITE_API_URL || `http://localhost:3001`;
 
-const ShoppingList = ({userData}) => {
+const ShoppingList = ({ userData }) => {
 
     const [itemInputs, setItemInputs] = useState([]);
     const [mealList, setMealList] = useState([]);
@@ -14,100 +14,101 @@ const ShoppingList = ({userData}) => {
 
     const mealListRef = useRef([]);
 
+
     useEffect(() => {
-      // Update the ref whenever mealList changes
-      mealListRef.current = mealList;
+        // Update the ref whenever mealList changes
+        mealListRef.current = mealList;
     }, [mealList]);
 
     useEffect(() => {
 
-           // console.log(userData);
+        // console.log(userData);
 
-                    setItemInputs(convertGroupedToUngrouped(userData.miscShopingList));
-                    setMealList([...userData.planShopingList]);
-                    setMiscList([...userData.miscShopingList]);
+        setItemInputs(convertGroupedToUngrouped(userData.miscShopingList));
+        setMealList([...userData.planShopingList]);
+        setMiscList([...userData.miscShopingList]);
 
-                
 
-        
+
+
     }, [userData]);
 
     function convertGroupedToUngrouped(items) {
         const ungroupedItems = [];
-      if(items === undefined) {
-        return ungroupedItems;
-      }
+        if (items === undefined) {
+            return ungroupedItems;
+        }
         // Loop through each ingredient
         items.forEach(item => {
-          // Loop through each amount in the amounts array
-          item.amounts.forEach(amountObj => {
-            // Create a new ingredient object with ungrouped amounts
-            ungroupedItems.push({
-              name: item.name,
-              amount: amountObj.amount,
-              unit: amountObj.unit,
-              checked: item.checked || false, // default to false if not defined
+            // Loop through each amount in the amounts array
+            item.amounts.forEach(amountObj => {
+                // Create a new ingredient object with ungrouped amounts
+                ungroupedItems.push({
+                    name: item.name,
+                    amount: amountObj.amount,
+                    unit: amountObj.unit,
+                    checked: item.checked || false, // default to false if not defined
+                });
             });
-          });
         });
-      
+
         return ungroupedItems;
-      }
-      
+    }
+
 
     const saveMiscList = async () => {
         console.log(mealList);
         await fetch(`${API}/api/user/list/misc`, {
-            method:"put",
+            method: "put",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ user: userData._id, list: miscList})
+            body: JSON.stringify({ user: userData._id, list: miscList })
         }).then(response => {
-                    
+
             if (response.ok) {
-                
+
                 return response.json();
             }
             throw response;
         }).then(() => {
             window.location.reload();
-           
-            
-            
+
+
+
         }).catch(err => {
             console.log("Error fetching data", err);
-            
+
         });
     }
 
-    const saveMealList= async () => {
+    const saveMealList = async () => {
 
-        if(mealListRef.current.length !== 0){
+        if (mealListRef.current.length !== 0) {
 
             await fetch(`${API}/api/user/list/meal`, {
-                method:"put",
+                method: "put",
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ user: userData._id, list: mealListRef.current})
+                body: JSON.stringify({ user: userData._id, list: mealListRef.current })
             }).then(response => {
-                
+
                 if (response.ok) {
-                  //  console.log('saved');
+                    //  console.log('saved');
                     return response.json();
                 }
                 throw response;
             }).catch(err => {
                 console.log("Error fetching data", err);
-                
+
             });
         }
-        
+
     }
     const addItem = () => {
-        setItemInputs([...itemInputs, {name:'', amount:'', unit:'lb'}]); // Add an empty string to the inputs array
-        
+        setItemInputs([...itemInputs, { name: '', amount: '', unit: 'lb' }]); // Add an empty string to the inputs array
+
     };
     const removeItem = (index) => {
         const newInputs = itemInputs.filter((_, i) => i !== index);
@@ -145,77 +146,108 @@ const ShoppingList = ({userData}) => {
         );
         console.log(miscList);
     };
-    const handleCheck = (index,) =>{
-       // console.log('checking');
+    const handleCheck = (index,) => {
+        // console.log('checking');
         const newlist = [...mealList];
-        newlist[index] = {...newlist[index], checked: !newlist[index].checked}
+        newlist[index] = { ...newlist[index], checked: !newlist[index].checked }
         setMealList([...newlist]);
-       // console.log(mealList);
+        // console.log(mealList);
     }
-    
+
     document.addEventListener('visibilitychange', async () => {
-        console.log('visiblityChanged');
+        // console.log('visiblityChanged');
         if (document.visibilityState === 'hidden' && visibility.current) {
             try {
                 visibility.current = false;
-               // console.log("visiblity" , visibility);
-                    
-                if(mealListRef.current.length !== 0){
+                // console.log("visiblity" , visibility);
 
-                   // console.log('saving this data',  mealListRef.current);
+                if (mealListRef.current.length !== 0) {
+
+                    // console.log('saving this data',  mealListRef.current);
                     await saveMealList();
                 }
-                    
-                
+
+
             } catch (error) {
                 console.error('Error saving data:', error);
-                
+
             }
         }
     });
 
     document.addEventListener('visibilitychange', async () => {
-        if(document.visibilityState === "visible"  && !visibility.current) {
+        if (document.visibilityState === "visible" && !visibility.current) {
             visibility.current = true;
-           // console.log("visiblity" , visibility);
+            // console.log("visiblity" , visibility);
         }
     })
-    
+
     window.addEventListener('beforeunload', async () => {
-       // console.log('before unload');
+        // console.log('before unload');
         try {
             await saveMealList();
         } catch (error) {
             console.error('Error saving data:', error);
         }
     });
-    
+
+    const groupedByCategory = mealList
+    .map((item, index) => ({ ...item, originalIndex: index })) // Add original index
+    .reduce((acc, item) => {
+        if (!acc[item.category]) {
+            acc[item.category] = [];
+        }
+        acc[item.category].push(item);
+        return acc;
+    }, {});
+
+    const categoryTitles = {
+        meatProtein: "Meats and Proteins",
+        dairy: "Dairy Products",
+        vegetablesFruits: "Vegetables and Fruits",
+        grainsBread: "Grains and Bread",
+        cannedPackagedGoods: "Canned and Packaged Goods",
+        spicesSeasonings: "Spices and Seasonings",
+        frozenFoods: "Frozen Foods",
+    };
+
+
     return (
         <>
             <Heading>Planned meals shopping list</Heading>
+
+<ul>
+    {Object.entries(groupedByCategory).map(([category, items]) => (
+        <li key={category}>
+            <Text fontWeight="bold">{categoryTitles[category] || category}</Text>
             <ul>
-                {mealList ? mealList.map((item , index) => (
+                {items.map((item) => (
                     <li key={item.name}>
                         <HStack>
-
-                        <Text fontSize='sm' as={item.checked ? 'del' : null}>
-                            {item.name} {item.amounts.map((amount) => (<span key={amount.unit}>
-                {amount.amount} {amount.unit}
-                {amount !== item.amounts.length - 1 && ", "}
-              </span>)) }
+                            <Text fontSize="sm" as={item.checked ? 'del' : null}>
+                                {item.name}{" "}
+                                {item.amounts.map((amount, amountIndex) => (
+                                    <span key={`${item.name}-${amount.unit}`}>
+                                        {amount.amount} {amount.unit}
+                                        {amountIndex !== item.amounts.length - 1 && ", "}
+                                    </span>
+                                ))}
                             </Text>
-              
-              <Checkbox defaultChecked={item.checked} onChange={()=>handleCheck(index)}/>
+                            <Checkbox 
+                                defaultChecked={item.checked} 
+                                onChange={() => handleCheck(item.originalIndex)} // Use original index
+                            />
                         </HStack>
                     </li>
-                    
-                    
-                )) : <li> nope</li> }
+                ))}
             </ul>
+        </li>
+    ))}
+</ul>
 
             <Heading>Misc shopping list</Heading>
             <ul>
-            {itemInputs.map((input, index) => (
+                {itemInputs.map((input, index) => (
                     <div key={index} style={{ marginBottom: '10px' }}>
                         <InputGroup>
                             <Input
@@ -223,7 +255,7 @@ const ShoppingList = ({userData}) => {
                                 value={input.name}
                                 minWidth={20}
                                 maxWidth={500}
-                                required = {true}
+                                required={true}
                                 onChange={(e) => handleItemInputChange(index, e.target.value)}
                                 placeholder="Item"
                                 bg={"white"}
