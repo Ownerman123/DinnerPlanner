@@ -36,7 +36,7 @@ const NewRecipe = () => {
             tags: [...tagInputs, newtag],
         });
         setTag('');
-        console.log(formState);
+        //console.log(formState);
     };
 
     const removeTag = (index) => {
@@ -46,7 +46,7 @@ const NewRecipe = () => {
             ...formState,
             tags: newTags,
         });
-        console.log(formState);
+       // console.log(formState);
     };
     const removeIngredient = (index) => {
         const newInputs = ingredientInputs.filter((_, i) => i !== index);
@@ -55,7 +55,7 @@ const NewRecipe = () => {
             ...formState,
             ingredients: newInputs,
         });
-        console.log(formState);
+        //(formState);
     };
 
     const handleChange = (e) => {
@@ -73,7 +73,7 @@ const NewRecipe = () => {
             ...formState,
             ingredients: newInputs,
         });
-        console.log(formState);
+        //console.log(formState);
     };
     const handleAmountInputChange = (index, value) => {
         const newInputs = [...ingredientInputs];
@@ -83,7 +83,7 @@ const NewRecipe = () => {
             ...formState,
             ingredients: newInputs,
         });
-        console.log(formState);
+        //console.log(formState);
     };
     const handleUnitInputChange = (index, value) => {
         const newInputs = [...ingredientInputs];
@@ -93,7 +93,7 @@ const NewRecipe = () => {
             ...formState,
             ingredients: newInputs,
         });
-        console.log(formState);
+        //console.log(formState);
     };
     const handleSnackChange = () => {
         setFormState
@@ -133,7 +133,7 @@ const NewRecipe = () => {
             base64Image = await toBase64(compressed);
         }
         const noEmpys = { ...formState, ingredients: formState.ingredients.filter(ingredient => ingredient.name !== '') };
-        console.log("no empy", noEmpys);
+        //console.log("no empy", noEmpys);
         try {
 
             setfetching(true);

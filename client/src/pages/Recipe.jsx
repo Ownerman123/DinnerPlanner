@@ -89,11 +89,11 @@ const Recipe = () => {
                 }
                 throw response
             }).then(data => {
-                console.log("set user after adition", data);
+               // console.log("set user after adition", data);
                 setUserData(data);
-                console.log(userData);
+               // console.log(userData);
                 setRecipeInBook(data.book?.includes(id));
-                console.log("set recipe in book to", isRecipeInBook);
+               // console.log("set recipe in book to", isRecipeInBook);
             }).finally(() => {
 
             });
@@ -116,11 +116,11 @@ const Recipe = () => {
             }
             throw response
         }).then(data => {
-            console.log("set user after removal", data);
+           // console.log("set user after removal", data);
             setUserData(data);
-            console.log(userData);
+           // console.log(userData);
             setRecipeInBook(data.book?.includes(id));
-            console.log("set recipe in book to", isRecipeInBook);
+           // console.log("set recipe in book to", isRecipeInBook);
         }).finally(() => {
 
         });
@@ -145,7 +145,7 @@ const Recipe = () => {
             throw response
         }).then(data => {
 
-            console.log(data);
+          //  console.log(data);
 
         }).finally(() => {
             window.location.assign('/userrecipes');

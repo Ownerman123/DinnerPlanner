@@ -13,14 +13,14 @@ const SearchBar = ({setRecipeData}) => {
     setLoading(true);
 
     try {
-        console.log(encodeURIComponent(searchTerm));
+       // console.log(encodeURIComponent(searchTerm));
       const response = await fetch(`${API}/api/recipe/search?q=${encodeURIComponent(searchTerm)}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
 
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
       setRecipeData(data);
     } catch (error) {
       console.error('Error searching recipes:', error);

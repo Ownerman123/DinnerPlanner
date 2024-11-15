@@ -58,7 +58,7 @@ const CategorizeWithAI = async (ingredient) => {
         // Parse the JSON response from the model
         const outputText = response.choices[0].message.content.trim();
         const categoryJson = JSON.parse(outputText);
-        console.log("info:" , outputText, categoryJson);
+        //console.log("info:" , outputText, categoryJson);
 
         return categoryJson;
     } catch (error) {
@@ -96,7 +96,7 @@ ingredientSchema.pre("save", async function (next) {
         const cat = await CategorizeWithAI(this.name);
         this.category = cat.category;
         
-        console.log(this.category, cat.category);
+       // console.log(this.category, cat.category);
     }
     next();
 });

@@ -5,31 +5,51 @@ import PropTypes from 'prop-types';
 const API = import.meta.env.VITE_API_URL || `http://localhost:3001`;
 
 const ShoppingList = ({ userData }) => {
-
+    
     const [itemInputs, setItemInputs] = useState([]);
     const [mealList, setMealList] = useState([]);
     const [miscList, setMiscList] = useState([]);
     const visibility = useRef(true);
     visibility.current = true;
-
+    
     const mealListRef = useRef([]);
-
-
+    
+    
     useEffect(() => {
         // Update the ref whenever mealList changes
         mealListRef.current = mealList;
     }, [mealList]);
+    useEffect(() => {
+        const handleBeforeUnload = async (event) => {
+            try {
+                await saveMealList();
+            } catch (error) {
+                console.error('Error saving data:', error);
+            }
+            // Optionally show a confirmation dialog
+            event.preventDefault();
+            event.returnValue = ''; // Required for the confirmation dialog
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    })
+    
+    
 
     useEffect(() => {
-
+        
         // console.log(userData);
-
+        
         setItemInputs(convertGroupedToUngrouped(userData.miscShopingList));
         setMealList([...userData.planShopingList]);
         setMiscList([...userData.miscShopingList]);
-
-
-
+        
+        
+        
 
     }, [userData]);
 
@@ -57,7 +77,7 @@ const ShoppingList = ({ userData }) => {
 
 
     const saveMiscList = async () => {
-        console.log(mealList);
+       // console.log(mealList);
         await fetch(`${API}/api/user/list/misc`, {
             method: "put",
             headers: {
@@ -116,7 +136,7 @@ const ShoppingList = ({ userData }) => {
         setMiscList(
             [...newInputs]
         );
-        console.log(miscList);
+       //console.log(miscList);
     };
 
     const handleItemInputChange = (index, value) => {
@@ -126,7 +146,7 @@ const ShoppingList = ({ userData }) => {
         setMiscList(
             [...newInputs]
         );
-        console.log(miscList);
+       // console.log(miscList);
     };
     const handleAmountInputChange = (index, value) => {
         const newInputs = [...itemInputs];
@@ -135,7 +155,7 @@ const ShoppingList = ({ userData }) => {
         setMiscList(
             [...newInputs]
         );
-        console.log(miscList);
+       // console.log(miscList);
     };
     const handleUnitInputChange = (index, value) => {
         const newInputs = [...itemInputs];
@@ -144,7 +164,7 @@ const ShoppingList = ({ userData }) => {
         setMiscList(
             [...newInputs]
         );
-        console.log(miscList);
+        //console.log(miscList);
     };
     const handleCheck = (index,) => {
         // console.log('checking');
@@ -182,14 +202,6 @@ const ShoppingList = ({ userData }) => {
         }
     })
 
-    window.addEventListener('beforeunload', async () => {
-        // console.log('before unload');
-        try {
-            await saveMealList();
-        } catch (error) {
-            console.error('Error saving data:', error);
-        }
-    });
 
     const groupedByCategory = mealList
     .map((item, index) => ({ ...item, originalIndex: index })) // Add original index

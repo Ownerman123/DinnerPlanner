@@ -137,12 +137,12 @@ router.post('/', async (req, res) => {
 
             if(ingredientData.ingredient){
                 categorizedIngredients.push(ingredient);
-                console.log("already categorized");
+                //console.log("already categorized");
                 
             }
             const alreadyExists  = await Ingredient.find({name: ingredientData.name});
             if(alreadyExists.length !== 0) {
-                console.log("no new ingredient created", alreadyExists);
+              //  console.log("no new ingredient created", alreadyExists);
                 const newIngredientData = {
                     ingredient: alreadyExists[0]._id,
                     name: ingredientData.name,
@@ -150,7 +150,7 @@ router.post('/', async (req, res) => {
                     unit: ingredientData.unit,
                   };
                   
-                  console.log("ingredient data" ,newIngredientData.ingredient);
+                //  console.log("ingredient data" ,newIngredientData.ingredient);
                   categorizedIngredients.push(newIngredientData);
             }else{
 
@@ -216,7 +216,7 @@ router.post('/', async (req, res) => {
                 }
             }
         }
-        console.log(recipe);
+       // console.log(recipe);
         res.json(recipe).status(200);
     } catch (err) {
         console.error("Error in recipe creation:", err); // Log the actual error for debugging
@@ -245,12 +245,12 @@ router.put('/', async (req, res) => {
 
             if(ingredientData.ingredient){
                 categorizedIngredients.push(ingredient);
-                console.log("already categorized");
+               // console.log("already categorized");
                 
             }
             const alreadyExists  = await Ingredient.find({name: ingredientData.name});
             if(alreadyExists.length !== 0) {
-                console.log("no new ingredient created", alreadyExists);
+               // console.log("no new ingredient created", alreadyExists);
                 const newIngredientData = {
                     ingredient: alreadyExists[0]._id,
                     name: ingredientData.name,
@@ -258,7 +258,7 @@ router.put('/', async (req, res) => {
                     unit: ingredientData.unit,
                   };
                   
-                  console.log("ingredient data" ,newIngredientData.ingredient);
+               //   console.log("ingredient data" ,newIngredientData.ingredient);
                   categorizedIngredients.push(newIngredientData);
             }else{
 
@@ -323,7 +323,7 @@ router.put('/', async (req, res) => {
             }
         }
 
-        console.log(recipe);
+       // console.log(recipe);
         await recipe.save();
         res.status(200).json(recipe);
     } catch (err) {
@@ -342,7 +342,7 @@ router.delete('/:id', async (req, res) => {
 });
 
 router.put('/migrate', async (req, res) => {
-    console.log('hit');
+    
     try {
         const recipes = await Recipe.find({_id: '67094fcb6410a7a1544c5b78' });
         recipes.forEach(async recipe => {
@@ -352,7 +352,7 @@ router.put('/migrate', async (req, res) => {
                 // Save the new ingredient to the Ingredient model
                 if(oldIngredient.ingredient){
                     newIngredients.push(oldIngredient);
-                    console.log("already formatted");
+                   // console.log("already formatted");
                     return;
                 }
                 const alreadyExists  = await Ingredient.find({name: oldIngredient.name});
@@ -363,9 +363,9 @@ router.put('/migrate', async (req, res) => {
                         amount: oldIngredient.amount,
                         unit: oldIngredient.unit,
                       };
-                      console.log("old amount:", oldIngredient.amount);
-                      console.log("old name:", oldIngredient.name);
-                      console.log("old unit:", oldIngredient.unit);
+                    //  console.log("old amount:", oldIngredient.amount);
+                    //  console.log("old name:", oldIngredient.name);
+                    //  console.log("old unit:", oldIngredient.unit);
 
                       newIngredients.push(newIngredientData);
                 }else{

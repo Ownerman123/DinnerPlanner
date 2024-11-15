@@ -77,7 +77,7 @@ const Registration = () => {
                 console.log(err);
             }
         } else {
-            console.log('in else statement', newuser);
+           // console.log('in else statement', newuser);
             setError('User with that Username or email already exists');
         }
     }

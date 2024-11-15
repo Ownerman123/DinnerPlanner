@@ -20,7 +20,7 @@ router.post('/login', async (req, res) => {
     const passlessUser = await User.findOne({ email: email }).select('-password');
 
 
-    console.log(passlessUser);
+    //console.log(passlessUser);
 
 
     if (!user) {
@@ -71,7 +71,7 @@ router.post('/token', async (req, res) => {
 // {"token"}
 router.delete('/logout', async (req, res) => {
     const deleted = await RefreshToken.deleteMany({ token: req.body.token });
-    console.log(deleted);
+    //console.log(deleted);
 
 
     res.sendStatus(204);

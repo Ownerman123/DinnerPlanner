@@ -114,7 +114,7 @@ router.put('/plan', async (req, res) => {
         user.planShopingList = await generateRecipeShoppingList(user.plan);
        
         await user.save();
-        console.log(user);
+       // console.log(user);
 
         const newplan = await User.findOne({ _id: req.body.user }).populate('book').populate('plan')
         res.json(newplan).status(200);
@@ -176,7 +176,7 @@ router.put('/plan/roll', async (req, res) => {
 
         // If no available recipes left, return null (or handle accordingly)
         if (availableRecipes.length === 0) {
-            console.log('No more available recipes to add.');
+           // console.log('No more available recipes to add.');
             return og;
         }
 
@@ -201,7 +201,7 @@ try {
 });
 router.put('/list/meal', async (req, res) => {
 try {
-    console.log("list" ,req.body.list);
+   // console.log("list" ,req.body.list);
     const user = await User.findOne({ _id: req.body.user }).select('-password');
     user.planShopingList = req.body.list;
     await user.save();
@@ -216,7 +216,7 @@ async function generateRecipeShoppingList(recipeIds) {
     try {
         // Fetch recipes by ids
         const recipes = await Recipe.find({ _id: { $in: recipeIds } }).populate('ingredients.ingredient').lean();
-console.log("RECIPES" ,recipes);
+//console.log("RECIPES" ,recipes);
         const shoppingList = {};
 
         // Loop through each recipe and its ingredients
@@ -226,7 +226,7 @@ console.log("RECIPES" ,recipes);
                 if (!shoppingList[name]) {
                     // If ingredient not in list, add it with the amount and unit
                     shoppingList[name] = [{ amount: parseFloat(amount) || 0 , unit, category: ingredient?.category || 'misc' }];
-                    console.log(ingredient?.category || 'no sir')
+                   // console.log(ingredient?.category || 'no sir')
                 } else {
                     // If ingredient exists, check if there's already an entry with the same unit
                     let ingredientEntry = shoppingList[name].find(entry => entry.unit === unit);
@@ -248,7 +248,7 @@ console.log("RECIPES" ,recipes);
             category: shoppingList[name][0]?.category  || 'misc',
             amounts: shoppingList[name] // Assign the array of { amount, unit } objects directly
         }));
-console.log(formattedShoppingList);
+//console.log(formattedShoppingList);
         return formattedShoppingList;
 
     } catch (error) {

@@ -65,7 +65,7 @@ const EditRecipe = () => {
             tags: [...tagInputs, newtag],
         });
         setTag('');
-        console.log(formState);
+        //console.log(formState);
     };
 
     const removeTag = (index) => {
@@ -75,7 +75,7 @@ const EditRecipe = () => {
             ...formState,
             tags: newTags,
         });
-        console.log(formState);
+        //console.log(formState);
     };
     const removeIngredient = (index) => {
         const newInputs = ingredientInputs.filter((_, i) => i !== index);
@@ -84,7 +84,7 @@ const EditRecipe = () => {
             ...formState,
             ingredients: newInputs,
         });
-        console.log(formState);
+        //console.log(formState);
     };
 
     const handleChange = (e) => {
@@ -102,7 +102,7 @@ const EditRecipe = () => {
             ...formState,
             ingredients: newInputs,
         });
-        console.log(formState);
+       // console.log(formState);
     };
     const handleAmountInputChange = (index, value) => {
         const newInputs = [...ingredientInputs];
@@ -112,7 +112,7 @@ const EditRecipe = () => {
             ...formState,
             ingredients: newInputs,
         });
-        console.log(formState);
+        //console.log(formState);
     };
     const handleUnitInputChange = (index, value) => {
         const newInputs = [...ingredientInputs];
@@ -122,7 +122,7 @@ const EditRecipe = () => {
             ...formState,
             ingredients: newInputs,
         });
-        console.log(formState);
+        //console.log(formState);
     };
     const handleSnackChange = () => {
         setFormState
@@ -164,7 +164,7 @@ const EditRecipe = () => {
         const justTagNames = { ...formState, tags: formState.tags.map((tag) => (tag?.tag ? tag.tag : tag)) }
         const noEmpys = { ...justTagNames, ingredients: justTagNames.ingredients.filter(ingredient => ingredient.name !== '') };
         const noIds = { ...noEmpys, ingredients: noEmpys.ingredients.map((ingredient) => ({ amount: ingredient.amount, name: ingredient.name, unit: ingredient.unit })) }
-        console.log("no empy", noIds);
+       // console.log("no empy", noIds);
         try {
 
             setfetching(true);
