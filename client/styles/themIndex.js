@@ -1,6 +1,7 @@
-import { extendTheme,  } from "@chakra-ui/react";
+import { Checkbox, extendTheme,  } from "@chakra-ui/react";
 import { buttonTheme } from "./ButtonTheme";
 import { menuTheme } from "./MenuTheme";
+import { checkboxTheme } from "./CheckBoxTheme";
 
 
 
@@ -34,7 +35,7 @@ const theme = extendTheme({
     },
     components: {
         Button: buttonTheme,
-        
+        Checkbox: checkboxTheme,
         Menu: menuTheme
     },
 });

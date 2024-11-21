@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, } from "react";
-import { Heading, Select, Input, InputGroup, InputRightAddon, Button, Checkbox, Text, HStack } from "@chakra-ui/react";
+import { Heading, Select, Input, InputGroup, InputRightAddon, Button, Checkbox, Text, HStack, Box } from "@chakra-ui/react";
 import PropTypes from 'prop-types';
 
 const API = import.meta.env.VITE_API_URL || `http://localhost:3001`;
@@ -228,14 +228,16 @@ const ShoppingList = ({ userData }) => {
         <>
             <Heading>Planned meals shopping list</Heading>
 
-<ul>
+<ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
+    <Box bg={'cardlightblue'} p={3} borderRadius={3}>
     {Object.entries(groupedByCategory).map(([category, items]) => (
         <li key={category}>
-            <Text fontWeight="bold">{categoryTitles[category] || category}</Text>
-            <ul>
+            <Heading fontWeight="bold" size={'lg'} bg={'bgmidblue'} borderRadius={3} p={1}>{categoryTitles[category] || category}</Heading>
+           <Box bg={"offwhite"} color={'black'}>
+            <ul style={{ listStyleType: 'none', padding: 0, margin: 0,}}>
                 {items.map((item) => (
-                    <li key={item.name}>
-                        <HStack>
+                    <li key={item.name} >
+                        <HStack m={1} >
                             <Text fontSize="sm" as={item.checked ? 'del' : null}>
                                 {item.name}{" "}
                                 {item.amounts.map((amount, amountIndex) => (
@@ -247,14 +249,17 @@ const ShoppingList = ({ userData }) => {
                             </Text>
                             <Checkbox 
                                 defaultChecked={item.checked} 
+                                color={"black"}
                                 onChange={() => handleCheck(item.originalIndex)} // Use original index
-                            />
+                                />
                         </HStack>
                     </li>
                 ))}
             </ul>
+                </Box>
         </li>
     ))}
+    </Box>
 </ul>
 
             <Heading>Misc shopping list</Heading>
