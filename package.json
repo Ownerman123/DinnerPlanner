@@ -4,6 +4,7 @@
   "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
   "main": "index.js",
   "dependencies": {
+    "@chakra-ui/react": "^2.8.2",
     "concurrently": "^8.2.2",
     "dotenv": "^16.4.5"
   },

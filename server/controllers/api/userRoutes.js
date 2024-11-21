@@ -186,6 +186,56 @@ router.put('/plan/roll', async (req, res) => {
         return availableRecipes[randomIndex];
     }
 });
+router.put('/plan/add', async (req, res) => {
+    try{
+
+        const user = await User.findOne({ _id: req.body.user }).populate('book').populate('plan');
+        if (!user) {
+            res.json({ message: "not logged in!" }).status(401);
+        }
+
+        user.plan.push(req.body.newRecipe);
+        user.planShopingList = await generateRecipeShoppingList(user.plan.map(recipe => recipe._id));
+        
+        await user.save();
+
+        const newplan = await User.findOne({ _id: req.body.user }).populate('book').populate('plan')
+        res.json(newplan).status(200);
+
+    } catch (error) {
+        res.json({ message: error }).status(500);
+    }
+
+});
+router.put('/plan/remove', async (req, res) => {
+    try {
+        
+        const user = await User.findOne({ _id: req.body.user }).populate('book').populate('plan');
+        
+        if (!user) {
+            return res.status(401).json({ message: "Not logged in!" });
+        }
+
+        const recipeIndex = user.plan.findIndex(recipe => recipe._id.toString() === req.body.removeRecipe);
+
+        // Remove only if the recipe exists in the array
+        if (recipeIndex !== -1) {
+            user.plan.splice(recipeIndex, 1); // Remove one instance of the recipe
+        } else {
+            return res.status(404).json({ message: "Recipe not found in the plan!" });
+        }
+
+        user.planShopingList = await generateRecipeShoppingList(user.plan.map(recipe => recipe._id));
+
+        await user.save();
+
+        const updatedUser = await User.findOne({ _id: req.body.user }).populate('book').populate('plan');
+        res.status(200).json(updatedUser);
+
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
 
 router.put('/list/misc', async (req, res) => {
 try {

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import RecipeCard from "../components/recipeStuff/RecipeCard"
 import { useAuth } from "../auth/useAuth"
-import { Box, Input, Button, IconButton } from "@chakra-ui/react";
+import { Box, Input, Button, IconButton, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import { GiRollingDices } from "react-icons/gi";
+import { RxCross2 } from "react-icons/rx";
 import ShoppingList from "../components/recipeStuff/ShoppingList"
 
 const API = import.meta.env.VITE_API_URL || `http://localhost:3001`;
@@ -34,7 +35,7 @@ const Plan = () => {
                     throw response;
                 }).then(data => {
                     setUserData(data);
-
+                    console.log(data);
                     setSnacks(howManySnacks(data.book));
 
 
@@ -81,6 +82,54 @@ const Plan = () => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ id: recipeId, user: user._id })
+        }).then(response => {
+
+            if (response.ok) {
+
+                return response.json();
+            }
+            throw response;
+        }).then(data => {
+            setUserData(data);
+
+
+
+        }).catch(err => {
+            console.log("Error fetching data", err);
+            setError(err);
+        });
+    }
+    async function addToPlan(recipeId) {
+        await fetch(`${API}/api/user/plan/add`, {
+            method: "put",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ newRecipe: recipeId, user: user._id })
+        }).then(response => {
+
+            if (response.ok) {
+
+                return response.json();
+            }
+            throw response;
+        }).then(data => {
+            setUserData(data);
+
+
+
+        }).catch(err => {
+            console.log("Error fetching data", err);
+            setError(err);
+        });
+    }
+    async function removeFromList(recipeId) {
+        await fetch(`${API}/api/user/plan/remove`, {
+            method: "put",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ removeRecipe: recipeId, user: user._id })
         }).then(response => {
 
             if (response.ok) {
@@ -183,29 +232,57 @@ const Plan = () => {
                 {/* would you like to plan snacks */}
                 {/* how many */}
                 <label htmlFor="snackCount">Number of snacks to plan</label>
-                <Input 
-                type='number'
-                 onChange={(e) => handleNumChange(e)}
-                  name="snackCount"
-                   value={formState.snackCount}
+                <Input
+                    type='number'
+                    onChange={(e) => handleNumChange(e)}
+                    name="snackCount"
+                    value={formState.snackCount}
                     min={0}
-                     max={userData && userData?.book ? snacks : 0}
-                     bg={"white"}
-                     color={"black"}
-                     ></Input>
+                    max={userData && userData?.book ? snacks : 0}
+                    bg={"white"}
+                    color={"black"}
+                ></Input>
 
                 {/* plan button */}
                 <Button onClick={() => getPlan()} mt={3}>Plan!</Button>
                 <ul>
                     {userData.plan ? userData.plan.map((recipe) => (
                         <li key={recipe.id} >
+                            <Box>
                             <RecipeCard recipe={recipe} />
-                            <IconButton icon={<GiRollingDices />} h={3} w={3} onClick={() => getReroll(recipe.id)} />
+                            <IconButton icon={<GiRollingDices size={"lg"} />} h={10} w={10} onClick={() => getReroll(recipe.id)} />
+                            <IconButton icon={<RxCross2 size={'lg'}/>} bg={'red'}  h={10} w={10} onClick={() => removeFromList(recipe.id)} />
+                            </Box>
                         </li>
 
 
                     )) : <li>you havent generated a plan yet</li>}
                 </ul>
+
+                <Menu>
+                    <MenuButton
+                        px={4}
+                        py={2}
+                        transition='all 0.2s'
+                        borderRadius='md'
+                        borderWidth='1px'
+                        bg={"colors.primarygreen"}
+                        _hover={{ bg: 'green' }}
+                        _expanded={{ bg: 'blue.400' }}
+                        _focus={{ boxShadow: 'outline' }}
+                    >
+                        Add to plan from book
+                    </MenuButton>
+                    <MenuList bg={"cardlightblue"}>
+                        {userData.book ? userData.book.map((recipe) => (
+
+                            <Button key={recipe.id} onClick={() => addToPlan(recipe.id)} >
+                                <MenuItem bg={"primarygreen"} >{recipe.title}</MenuItem>
+                            </Button>
+                        )) : null}
+
+                    </MenuList>
+                </Menu>
                 <ShoppingList userData={userData} />
 
             </Box>
