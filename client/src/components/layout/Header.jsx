@@ -51,7 +51,7 @@ const Header = () => {
           borderBottom="1px"
           alignContent={"center"}
         >
-          <Heading><Link as={RouterLink} to={'/'}>Dinner Planner!</Link></Heading>
+          <Heading p={2}><Link as={RouterLink} to={'/'}>Dinner Planner!</Link></Heading>
           <Spacer></Spacer>
           <nav>
             <Show above="lg">

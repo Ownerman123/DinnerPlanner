@@ -14,7 +14,7 @@ const Home = () => {
         <Box bg={'radial-gradient(circle at top left, #9fc0d1, #608da4)'} color={'white'} flexGrow={1}>
 
             <Text p={2}>{homeText}</Text>
-            <Text p={6} width={"50%"} bg={"bgmidblue"} borderRadius={3} justifySelf={"center"}>Welcome to Super Dinner planner. Sign up and get started!
+            <Text p={6} width={"75%"} bg={"bgmidblue"} borderRadius={3} justifySelf={"center"}>Welcome to Super Dinner planner. Sign up and get started!
                 Planning meals has never been easier.
                 Just input your favorite recipes or find other users recipes to add to your book.
                 Then plan at the click of a button all the meals you need for the week.
