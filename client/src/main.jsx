@@ -15,9 +15,10 @@ import NewRecipe from './pages/NewRecipe.jsx';
 import UsersRecipes from './pages/UsersRecipes.jsx';
 import MyBook from './pages/MyBook.jsx'
 import Plan from './pages/Plan.jsx';
+import TchTch from './pages/tchtch.jsx';
+import EditRecipe from './pages/EditRecipe.jsx';
 
 import './index.css';
-import EditRecipe from './pages/EditRecipe.jsx';
 
 const reactRouter = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ const reactRouter = createBrowserRouter([
       {
         path: "/recipes",
         element: <Recipes />
+      },
+      {
+        path: "/tchtch",
+        element: <TchTch />
       },
       {
         element: <ProtectedRoute />,

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
 import { Box, Wrap, Container, Button, Stack, Image, Input, Textarea, FormControl, FormLabel, Select, InputRightAddon, InputGroup, Checkbox, ButtonGroup, IconButton, } from "@chakra-ui/react";
 import { CloseIcon, AddIcon } from "@chakra-ui/icons"
 import { useAuth } from "../auth/useAuth"
@@ -41,6 +41,8 @@ const EditRecipe = () => {
                 setFormState(data);
                 setIngredientInputs([...data.ingredients])
                 setTagInputs([...data.tags])
+                console.log(data, user);
+                
             } catch (err) {
                 console.log("Error fetching recipe data", err);
                 setError(err);
@@ -210,6 +212,10 @@ const EditRecipe = () => {
         )
     }
 
+    if( recipeData.author.id !== user.id){
+       return  <Navigate to="/tchtch" replace />
+    }
+
     return (
         <Box
             bg={'radial-gradient(circle at top left, #9fc0d1, #608da4)'}
@@ -300,7 +306,7 @@ const EditRecipe = () => {
                                         width={10}
                                         placeholder="0.00"
 
-                                        color={"black"}
+                                        color={"white"}
 
                                         onChange={(e) => handleAmountInputChange(index, e.target.value)}
                                     />
